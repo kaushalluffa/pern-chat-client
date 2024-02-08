@@ -7,6 +7,8 @@ import "./global.css";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignupPage from "./components/auth/SignupPage";
+import theme from "./theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
 const container = document.getElementById("root");
 
@@ -25,8 +27,11 @@ const router = createBrowserRouter([
 ]);
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>
 );
