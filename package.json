@@ -1,7 +1,7 @@
 {
   "name": "discord-client-react",
   "version": "0.0.0",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -41,6 +41,7 @@
     "react-hook-form": "^7.45.4",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.0",
+    "semantic-release": "^23.0.2",
     "socket.io-client": "^4.7.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
