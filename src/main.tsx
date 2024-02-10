@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignupPage from "./components/auth/SignupPage";
 import theme from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import LoginPage from "./components/auth/LoginPage";
 
 const container = document.getElementById("root");
 
@@ -19,10 +20,14 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children: [
-      { path: "auth/signup", element: <SignupPage /> },
-      { path: "auth/login", element: <SignupPage /> },
-    ],
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 root.render(

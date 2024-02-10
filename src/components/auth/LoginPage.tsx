@@ -1,9 +1,15 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
-import { Button, Grid, Paper, TextField, useTheme } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {
+  Button,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
 
-const SignupPage = () => {
+const LoginPage = () => {
   const theme = useTheme();
   return (
     <Grid
@@ -22,17 +28,16 @@ const SignupPage = () => {
         gap={2}
         p={4}
       >
-        <Typography variant="h5">Don't have an account?</Typography>
+        <Typography variant="h5">Already have an account?</Typography>
         <TextField size="small" placeholder="Email" />
         <TextField size="small" placeholder="Password" />
-        <TextField size="small" placeholder="Name" />
         <Button size="small" variant="contained">
-          Signup
+          Login
         </Button>
-        <Link to="/login">Already have an account? Log in</Link>
+        <Link to="/signup">Don't have an account? Sign up</Link>
       </Grid>
     </Grid>
   );
 };
 
-export default SignupPage;
+export default LoginPage;
