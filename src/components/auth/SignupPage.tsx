@@ -41,9 +41,7 @@ const SignupPage = () => {
         message: "Signed up successfully. Now redirecting",
       });
       setDisable({ message: "", status: true });
-      setTimeout(() => {
-        navigate(data?.redirect ?? VITE_SIGNUP_SUCCESS_REDIRECT);
-      }, 1500);
+      navigate(data?.redirect ?? VITE_SIGNUP_SUCCESS_REDIRECT);
     },
     onError: (error: any) => {
       setOpenSnackBar({

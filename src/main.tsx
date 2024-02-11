@@ -26,6 +26,14 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: "/server/:serverId",
+    element: <App />,
+  },
+  {
+    path: "/server/:serverId/channel/:channelId",
+    element: <App />,
+  },
+  {
     path: "/signup",
     element: <SignupPage />,
   },

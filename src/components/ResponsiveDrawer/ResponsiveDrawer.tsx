@@ -16,21 +16,29 @@ import { Avatar, Grid } from "@mui/material";
 import TagIcon from "@mui/icons-material/Tag";
 import AddIcon from "@mui/icons-material/Add";
 import WidgetsIcon from "@mui/icons-material/Widgets";
+import { useQuery } from "@tanstack/react-query";
+import { getServers } from "../../api/getServers";
+import { Server } from "@/utils/types";
+import { useParams, useNavigate } from "react-router-dom";
 const drawerWidth = 240;
 
 export default function ResponsiveDrawer() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-
+  const { serverId, channelId } = useParams();
+  const navigate = useNavigate();
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["getServers"],
+    queryFn: getServers,
+  });
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
   };
-
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);
   };
-
+  
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
@@ -52,14 +60,17 @@ export default function ResponsiveDrawer() {
             </Avatar>
           </ListItemIcon>
         </ListItem>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {data?.map((server: Server) => (
+          <ListItem key={server?.id} disablePadding>
+            <ListItemButton
+              onClick={() => navigate(`/server/${server?.id}`)}
+              selected={serverId === server?.id}
+            >
               <ListItemIcon>
-                <Avatar />
+                <Avatar src={server?.imageUrl} />
               </ListItemIcon>
               <ListItemText primaryTypographyProps={{ variant: "h6" }}>
-                {text}
+                {server?.name}
               </ListItemText>
             </ListItemButton>
           </ListItem>
