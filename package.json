@@ -21,12 +21,13 @@
     "@mui/icons-material": "^5.15.8",
     "@mui/material": "^5.15.7",
     "@reduxjs/toolkit": "^2.1.0",
-    "@tanstack/react-query": "^4.36.1",
+    "@tanstack/react-query": "^5.20.1",
     "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.6.7",
     "emoji-mart": "^5.5.2",
     "livekit-client": "^1.13.0",
     "react": "^18",
+    "react-cookie": "^7.0.2",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-redux": "^9.1.0",
@@ -35,6 +36,8 @@
     "uploadthing": "^5.3.3"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.20.1",
+    "@tanstack/react-query-devtools": "^5.20.1",
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
