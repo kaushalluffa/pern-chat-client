@@ -56,7 +56,7 @@ export default function ConversationContextProvider({
       return setCurrentLoggedInMember(currentMember ?? null);
     }
   }, [currentConversation, loggedInUser]);
-  console.log(currentConversation, "currentConversation");
+
   return (
     <ConversationContext.Provider
       value={{

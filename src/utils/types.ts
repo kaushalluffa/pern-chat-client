@@ -69,3 +69,59 @@ export interface Member {
   role: string;
   user: User;
 }
+export interface StartConversationModalProps {
+  openNewChatModal: boolean;
+  setOpenNewChatModal: React.Dispatch<SetStateAction<boolean>>;
+  allUsers: User[];
+  selectedUsers: User[];
+  setSelectedUsers: React.Dispatch<SetStateAction<User[]>>;
+  handleCreateConversation: () => void;
+}
+export interface ChatListDrawerProps {
+  setOpenNewChatModal: React.Dispatch<SetStateAction<boolean>>;
+  conversations: Conversation[];
+  loggedInUser: LoggedInUser;
+  currentConversation: Conversation | null;
+  drawerWidth: number;
+}
+export interface CustomAppBarProps {
+  drawerWidth: number;
+  currentLoggedInMember: Member | null;
+}
+export interface ConversationContainerProps {
+  currentConversation: Conversation | null;
+  drawerWidth: number;
+  currentLoggedInMember: Member | null;
+  loggedInUser: LoggedInUser;
+  allMessages: Message[];
+  messagesEndRef: React.RefObject<HTMLDivElement>;
+}
+export interface SendMessageContainerProps {
+  currentConversation: Conversation | null;
+  loggedInUser: LoggedInUser;
+}
+export interface MessagesListProps {
+  allMessages: Message[];
+  loggedInUser: LoggedInUser;
+  messagesEndRef: React.RefObject<HTMLDivElement>;
+}
+export interface MessageCardProps {
+  message: Message;
+  loggedInUser: LoggedInUser;
+  passRef: boolean;
+  messagesEndRef: React.RefObject<HTMLDivElement>;
+}
+export interface ChatListItemProps {
+  conversation: Conversation;
+  loggedInUser: LoggedInUser;
+  currentConversation: Conversation | null;
+}
+export interface SearchChatListItemProps {}
+export interface ChatListHeadingProps {
+  setOpenNewChatModal: React.Dispatch<SetStateAction<boolean>>;
+}
+export interface AddUserListItemProps {
+  setSelectedUsers: React.Dispatch<SetStateAction<User[]>>;
+  user: User;
+  selectedUsers: User[];
+}
