@@ -10,7 +10,6 @@ const ChatListDrawer = ({
   conversations,
   currentConversation,
   loggedInUser,
-  setOpenNewChatModal,
   drawerWidth,
 }: ChatListDrawerProps) => {
   return (
@@ -40,7 +39,7 @@ const ChatListDrawer = ({
         <Divider />
         <List>
           <SearchChatListItem />
-          <ChatListHeading setOpenNewChatModal={setOpenNewChatModal} />
+          <ChatListHeading />
           {conversations?.map((conversation: Conversation) => {
             return (
               <ChatListItem

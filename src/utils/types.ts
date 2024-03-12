@@ -1,12 +1,18 @@
 import React, { SetStateAction } from "react";
 import { Socket } from "socket.io-client";
+export interface SignupData {
+  email: string;
+  fullName: string;
+  password: string;
+  cPassword: string;
+  showP: boolean;
+  showCP: boolean;
+}
 export interface User {
   id: string;
   email: string;
   name: string;
   imageUrl: string | null;
-  createdAt: string;
-  workOSId: string;
 }
 export type LoggedInUser = {
   isAuthenticated: boolean;
@@ -15,6 +21,7 @@ export type LoggedInUser = {
 export type AuthContextType = {
   loggedInUser: LoggedInUser;
   setLoggedInUser: React.Dispatch<SetStateAction<LoggedInUser>> | null;
+  logout: () => void;
 };
 export interface SocketContextType {
   socket: Socket | null;
@@ -70,15 +77,10 @@ export interface Member {
   user: User;
 }
 export interface StartConversationModalProps {
-  openNewChatModal: boolean;
-  setOpenNewChatModal: React.Dispatch<SetStateAction<boolean>>;
-  allUsers: User[];
-  selectedUsers: User[];
-  setSelectedUsers: React.Dispatch<SetStateAction<User[]>>;
-  handleCreateConversation: () => void;
+  open: boolean;
+  onClose: () => void;
 }
 export interface ChatListDrawerProps {
-  setOpenNewChatModal: React.Dispatch<SetStateAction<boolean>>;
   conversations: Conversation[];
   loggedInUser: LoggedInUser;
   currentConversation: Conversation | null;
@@ -117,9 +119,7 @@ export interface ChatListItemProps {
   currentConversation: Conversation | null;
 }
 export interface SearchChatListItemProps {}
-export interface ChatListHeadingProps {
-  setOpenNewChatModal: React.Dispatch<SetStateAction<boolean>>;
-}
+
 export interface AddUserListItemProps {
   setSelectedUsers: React.Dispatch<SetStateAction<User[]>>;
   user: User;

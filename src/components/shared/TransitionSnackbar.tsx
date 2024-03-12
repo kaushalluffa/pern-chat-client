@@ -6,7 +6,7 @@ export default function TransitionsSnackbar({
   message,
   isOpen,
 }: {
-  message: any;
+  message: string;
   isOpen: boolean;
 }) {
   const [open, setOpen] = useState<boolean>(isOpen);

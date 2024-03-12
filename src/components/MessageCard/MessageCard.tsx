@@ -4,7 +4,12 @@ import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 
-const MessageCard = ({ message, loggedInUser, passRef,messagesEndRef }: MessageCardProps) => {
+const MessageCard = ({
+  message,
+  loggedInUser,
+  passRef,
+  messagesEndRef,
+}: MessageCardProps) => {
   return (
     <Grid
       ref={passRef ? messagesEndRef : null}
@@ -25,11 +30,6 @@ const MessageCard = ({ message, loggedInUser, passRef,messagesEndRef }: MessageC
           ? "row-reverse"
           : "row"
       }
-      sx={{
-        bgcolor: "#615EF0",
-        borderRadius: 4,
-        color: "#fff",
-      }}
     >
       <Avatar />
 
@@ -39,7 +39,11 @@ const MessageCard = ({ message, loggedInUser, passRef,messagesEndRef }: MessageC
         flexDirection="column"
         gap={1}
         p={1}
-        sx={{ bgcolor: "#615EF0" }}
+        sx={{
+          bgcolor: "#615EF0",
+          borderRadius: 4,
+          color: "#fff",
+        }}
       >
         <Grid container spacing={2}>
           <Grid item xs zeroMinWidth>

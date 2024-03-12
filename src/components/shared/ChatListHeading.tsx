@@ -1,9 +1,15 @@
-import { ChatListHeadingProps } from "@/utils/types";
+import { useModalsContext } from "@/contexts/ModalsContext";
 import { Add } from "@mui/icons-material";
-import { IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import React from "react";
 
-const ChatListHeading = ({ setOpenNewChatModal }: ChatListHeadingProps) => {
+const ChatListHeading = () => {
+  const { setCreateConversationModal } = useModalsContext();
   return (
     <ListItem>
       <ListItemText primaryTypographyProps={{ variant: "h5" }}>
@@ -17,7 +23,9 @@ const ChatListHeading = ({ setOpenNewChatModal }: ChatListHeadingProps) => {
           }}
           disableRipple
           onClick={() => {
-            setOpenNewChatModal(true);
+            setCreateConversationModal({
+              open: true,
+            });
           }}
         >
           <Add />
