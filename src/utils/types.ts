@@ -20,8 +20,7 @@ export type LoggedInUser = {
 };
 export type AuthContextType = {
   loggedInUser: LoggedInUser;
-  setLoggedInUser: React.Dispatch<SetStateAction<LoggedInUser>> | null;
-  logout: () => void;
+  setLoggedInUser: React.Dispatch<SetStateAction<LoggedInUser>>;
 };
 export interface SocketContextType {
   socket: Socket | null;

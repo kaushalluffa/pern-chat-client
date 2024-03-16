@@ -13,10 +13,25 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import CustomButton from "../shared/CustomButton";
 import useAuth from "@/hooks/useAuth";
 const Signup = () => {
-  const { signupData, handleSignupDataChange, handleSignup, showLoading } =
-    useAuth();
+  const {
+    signupData,
+    handleSignupDataChange,
+    handleSignup,
+    showLoading,
+    loading,
+  } = useAuth();
   if (showLoading) {
-    return <CircularProgress />;
+    return (
+      <Grid
+        container
+        width="100%"
+        height="100vh"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress />
+      </Grid>
+    );
   }
   return (
     <Grid
@@ -126,6 +141,8 @@ const Signup = () => {
           }}
         />
         <CustomButton
+          loading={loading === "signup"}
+          disabled={loading === "signup"}
           onClick={() => {
             handleSignup();
           }}

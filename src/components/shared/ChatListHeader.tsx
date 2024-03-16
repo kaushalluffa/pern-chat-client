@@ -11,13 +11,13 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import SettingIcon from "@mui/icons-material/Settings";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Home, Logout } from "@mui/icons-material";
-import { useAuthContext } from "@/contexts/AuthContext";
+
+import useAuth from "@/hooks/useAuth";
 
 const ChatListHeader = () => {
-  const navigate = useNavigate();
-  const { logout } = useAuthContext();
+  const { logout } = useAuth();
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(
     null
   );
@@ -70,7 +70,6 @@ const ChatListHeader = () => {
             <ListItemButton
               onClick={() => {
                 logout();
-                navigate("/login");
               }}
             >
               <ListItemIcon>

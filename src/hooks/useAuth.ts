@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useAuthContext } from "@/contexts/AuthContext";
 import { VITE_SERVER_URL } from "@/utils/constants";
-import { SignupData, User } from "@/utils/types";
+import { SignupData } from "@/utils/types";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 export default function useAuth() {
   const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
+  const [cookies, _, removeCookie] = useCookies(["token"]);
   const [showLoading, setShowLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<"login" | "signup" | null>(null);
+  const { setLoggedInUser } = useAuthContext();
   const [signupData, setSignupData] = useState<SignupData>({
     email: "",
     password: "",
@@ -45,9 +49,20 @@ export default function useAuth() {
   }) {
     setLoginData((prev) => ({ ...prev, [key]: value }));
   }
-
+  const handleVerifyUser = useCallback(async () => {
+    setShowLoading(true);
+    const response = await axios(`${VITE_SERVER_URL}/auth/verifyUser`, {
+      withCredentials: true,
+    });
+    if (response && response?.data && response?.data?.isAuthenticated) {
+      setLoggedInUser(response?.data);
+      navigate("/");
+    }
+    setShowLoading(false);
+  }, [navigate, setLoggedInUser]);
   async function handleSignup() {
-    await axios(`${VITE_SERVER_URL}/auth/signup`, {
+    setLoading("signup");
+    const response = await axios(`${VITE_SERVER_URL}/auth/signup`, {
       method: "POST",
       data: {
         email: signupData?.email,
@@ -56,9 +71,16 @@ export default function useAuth() {
       },
       withCredentials: true,
     });
+
+    if (response && response?.data) {
+      setLoggedInUser({ isAuthenticated: true, user: response?.data });
+      navigate("/");
+    }
+    setLoading(null);
   }
   async function handleLogin() {
-    await axios(`${VITE_SERVER_URL}/auth/login`, {
+    setLoading("login");
+    const response = await axios(`${VITE_SERVER_URL}/auth/login`, {
       method: "POST",
       data: {
         email: loginData?.email,
@@ -66,20 +88,23 @@ export default function useAuth() {
       },
       withCredentials: true,
     });
+    if (response && response?.data) {
+      setLoggedInUser({ isAuthenticated: true, user: response?.data });
+      navigate("/");
+    }
+    setLoading(null);
   }
-
+  async function logout() {
+    await removeCookie("token");
+    navigate("/login");
+  }
   useEffect(() => {
     if (cookies && cookies?.token && typeof cookies?.token === "string") {
-      const decodedToken: User = jwtDecode(cookies?.token ?? "");
-      if (decodedToken) {
-        navigate("/");
-      } else {
-        setShowLoading(false);
-      }
+      handleVerifyUser();
     } else {
       setShowLoading(false);
     }
-  }, [cookies, navigate]);
+  }, [cookies, handleVerifyUser]);
   return {
     signupData,
     handleSignupDataChange,
@@ -88,5 +113,7 @@ export default function useAuth() {
     handleLoginDataChange,
     loginData,
     showLoading,
+    loading,
+    logout,
   };
 }

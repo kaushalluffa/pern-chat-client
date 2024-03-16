@@ -13,8 +13,13 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import useAuth from "@/hooks/useAuth";
 import CustomButton from "../shared/CustomButton";
 const Login = () => {
-  const { loginData, handleLoginDataChange, showLoading, handleLogin } =
-    useAuth();
+  const {
+    loginData,
+    handleLoginDataChange,
+    handleLogin,
+    showLoading,
+    loading,
+  } = useAuth();
   if (showLoading) {
     return (
       <Grid
@@ -84,7 +89,12 @@ const Login = () => {
           size="small"
           placeholder="Enter your password"
         />
-        <CustomButton onClick={() => handleLogin()} variant="contained">
+        <CustomButton
+          loading={loading === "login"}
+          disabled={loading === "login"}
+          onClick={() => handleLogin()}
+          variant="contained"
+        >
           Login
         </CustomButton>
         <Link to="/signup" style={{ textAlign: "center" }}>

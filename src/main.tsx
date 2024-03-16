@@ -38,17 +38,16 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-
-        <AuthContextProvider>
-          <SocketContextProvider>
-            <ConversationContextProvider>
-              <CssBaseline />
-                <ModalsContextProvider>
-                  <RouterProvider router={router} />
-                </ModalsContextProvider>
-            </ConversationContextProvider>
-          </SocketContextProvider>
-        </AuthContextProvider>
+      <AuthContextProvider>
+        <SocketContextProvider>
+          <ConversationContextProvider>
+            <CssBaseline />
+            <ModalsContextProvider>
+              <RouterProvider router={router} />
+            </ModalsContextProvider>
+          </ConversationContextProvider>
+        </SocketContextProvider>
+      </AuthContextProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
