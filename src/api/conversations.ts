@@ -1,5 +1,6 @@
 import axios from "axios";
 import { VITE_SERVER_URL } from "../utils/constants";
+import { CreateConversationData } from "@/utils/types";
 export const getConversation = async () => {
   const response = await axios(`${VITE_SERVER_URL as string}/conversation`, {
     method: "GET",
@@ -9,7 +10,7 @@ export const getConversation = async () => {
   return response?.data;
 };
 
-export const createConversation = async (data: any) => {
+export const createConversation = async (data: CreateConversationData[]) => {
   const response = await axios(
     `${VITE_SERVER_URL as string}/conversation/create`,
     {
@@ -21,7 +22,7 @@ export const createConversation = async (data: any) => {
 
   return response?.data;
 };
-export const getOneConversation = async (conversationId: any) => {
+export const getOneConversation = async (conversationId: string) => {
   const response = await axios(`${VITE_SERVER_URL}/conversation`, {
     withCredentials: true,
     method: "POST",

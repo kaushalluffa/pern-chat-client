@@ -1,37 +1,23 @@
-import {
-  CircularProgress,
-  Grid,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import useAuth from "@/hooks/useAuth";
 import CustomButton from "../shared/CustomButton";
+import { useAuthContext } from "@/contexts/AuthContext";
+import FullScreenLoader from "../shared/FullScreenLoader";
 const Login = () => {
+  const { showLoading } = useAuthContext();
   const {
     loginData,
     handleLoginDataChange,
     handleLogin,
-    showLoading,
+
     loading,
   } = useAuth();
   if (showLoading) {
-    return (
-      <Grid
-        container
-        width="100%"
-        height="100vh"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress />
-      </Grid>
-    );
+    return <FullScreenLoader />;
   }
   return (
     <Grid
