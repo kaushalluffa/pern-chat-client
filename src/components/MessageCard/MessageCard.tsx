@@ -36,7 +36,10 @@ const MessageCard = ({
       <Avatar
         {...(message?.sender?.user?.imageUrl
           ? {}
-          : { ...stringAvatar(message?.sender?.user?.name) })}
+          : message?.sender?.user?.name
+          ? { ...stringAvatar(message?.sender?.user?.name) }
+          : {})}
+        sx={{ color: theme.palette.text.primary }}
       />
 
       <Grid

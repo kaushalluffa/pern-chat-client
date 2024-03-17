@@ -28,7 +28,7 @@ const CustomAppBar = ({
       <Toolbar>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item display="flex" gap={1} alignItems="center">
-            <Avatar src={""} />
+            <Avatar sx={{ color: theme.palette.text.primary }} src={""} />
             <Grid item>
               <Typography color={theme.palette.text.secondary}>
                 {currentLoggedInMember?.user?.name}

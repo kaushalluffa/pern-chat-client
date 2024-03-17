@@ -48,6 +48,7 @@ const AddUserListItem = ({
       >
         <ListItemIcon>
           <Avatar
+            sx={{ color: theme.palette.text.primary }}
             src={user?.imageUrl ?? ""}
             {...(user?.imageUrl ? null : { ...stringAvatar(user?.name) })}
           />

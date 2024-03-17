@@ -7,16 +7,13 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import useAuth from "@/hooks/useAuth";
 import CustomButton from "../CustomButton/CustomButton";
-import { useAuthContext } from "@/contexts/AuthContext";
-import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
+
 const Login = () => {
   const theme = useTheme();
-  const { showLoading } = useAuthContext();
   const {
     loginData,
     handleLoginDataChange,
@@ -24,17 +21,9 @@ const Login = () => {
 
     loading,
   } = useAuth();
-  if (showLoading) {
-    return <FullScreenLoader />;
-  }
+
   return (
-    <Grid
-      container
-      width="100%"
-      height="100vh"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Grid container justifyContent="center" alignItems="center">
       <Grid
         container
         flexDirection="column"
@@ -56,6 +45,24 @@ const Login = () => {
           }}
           size="small"
           placeholder="Enter your email"
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
+          }}
         />
         <TextField
           value={loginData?.password}
@@ -84,6 +91,24 @@ const Login = () => {
           }}
           size="small"
           placeholder="Enter your password"
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
+          }}
         />
         <CustomButton
           loading={loading === "login"}
@@ -93,9 +118,6 @@ const Login = () => {
         >
           Login
         </CustomButton>
-        <Link to="/signup" style={{ textAlign: "center" }}>
-          Don&apos;t have an account? Signup
-        </Link>
       </Grid>
     </Grid>
   );

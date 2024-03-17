@@ -44,12 +44,19 @@ const ChatListItem = ({
         focusRipple={false}
       >
         <ListItemIcon>
-          <Avatar src={""} {...stringAvatar(conversationTitle as string)} />
+          <Avatar
+            src={""}
+            {...stringAvatar(conversationTitle as string)}
+            sx={{ color: theme.palette.text.primary }}
+          />
         </ListItemIcon>
         <ListItemText
           primaryTypographyProps={{
             variant: "h6",
-            color: theme.palette.text.primary,
+            color:
+              currentConversation?.id === conversation?.id
+                ? theme.palette.text.primary
+                : theme.palette.text.secondary,
           }}
         >
           {conversationTitle ?? ""}

@@ -57,7 +57,7 @@ const Settings = () => {
             </Typography>
           </Grid>
           <Grid container alignItems="center" gap={2}>
-            <Avatar />
+            <Avatar sx={{ color: theme.palette.text.primary }} />
             <Typography color={theme.palette.text.secondary} variant="body2">
               Click on picture to update
             </Typography>

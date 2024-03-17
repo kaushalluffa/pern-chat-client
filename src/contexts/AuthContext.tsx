@@ -29,7 +29,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
           setLoggedInUser(response?.data ?? null);
         }
       } else {
-        navigate("/login");
+        navigate("/auth");
       }
       setShowLoading(false);
     };

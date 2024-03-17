@@ -56,7 +56,24 @@ export default function ConversationContextProvider({
       return setCurrentLoggedInMember(currentMember ?? null);
     }
   }, [currentConversation, loggedInUser]);
-
+  useEffect(() => {
+    if (socket) {
+      socket.on("newMessage", (data) => {
+        return setAllMessages((prev) => {
+          if (prev?.find((message: Message) => message?.id === data?.id)) {
+            return prev;
+          } else {
+            return [...prev, data];
+          }
+        });
+      });
+      return () => {
+        socket.off("newMessage", () => {
+          setAllMessages([]);
+        });
+      };
+    }
+  }, [socket]);
   return (
     <ConversationContext.Provider
       value={{

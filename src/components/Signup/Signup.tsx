@@ -7,29 +7,18 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CustomButton from "../CustomButton/CustomButton";
 import useAuth from "@/hooks/useAuth";
-import { useAuthContext } from "@/contexts/AuthContext";
-import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
+
 const Signup = () => {
   const theme = useTheme();
-  const { showLoading } = useAuthContext();
   const { signupData, handleSignupDataChange, handleSignup, loading } =
     useAuth();
-  if (showLoading) {
-    return <FullScreenLoader />;
-  }
+
   return (
-    <Grid
-      container
-      width="100%"
-      height="100vh"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Grid container justifyContent="center" alignItems="center">
       <Grid
         container
         flexDirection="column"
@@ -53,6 +42,24 @@ const Signup = () => {
           ) => {
             handleSignupDataChange({ key: "email", value: event.target.value });
           }}
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
+          }}
         />
         <TextField
           value={signupData?.fullName}
@@ -67,6 +74,24 @@ const Signup = () => {
               key: "fullName",
               value: event.target.value,
             });
+          }}
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
           }}
         />
         <TextField
@@ -96,6 +121,24 @@ const Signup = () => {
                 {signupData?.showP ? <VisibilityIcon /> : <VisibilityOffIcon />}
               </IconButton>
             ),
+          }}
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
           }}
         />
         <TextField
@@ -130,6 +173,24 @@ const Signup = () => {
               </IconButton>
             ),
           }}
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
+          }}
         />
         <CustomButton
           loading={loading === "signup"}
@@ -141,9 +202,6 @@ const Signup = () => {
         >
           Login
         </CustomButton>
-        <Link to="/login" style={{ textAlign: "center" }}>
-          Have account already? Login
-        </Link>
       </Grid>
     </Grid>
   );
