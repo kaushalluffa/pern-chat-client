@@ -24,11 +24,3 @@ export const createConversation = async (data: {
 
   return response?.data;
 };
-export const getOneConversation = async (conversationId: string) => {
-  const response = await axios(`${VITE_SERVER_URL}/conversation`, {
-    withCredentials: true,
-    method: "POST",
-    data: conversationId,
-  });
-  return response?.data ?? null;
-};

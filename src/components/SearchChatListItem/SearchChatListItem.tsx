@@ -1,10 +1,8 @@
-import { SearchChatListItemProps } from "@/utils/types";
 import { Search } from "@mui/icons-material";
 import { IconButton, ListItem, TextField, useTheme } from "@mui/material";
 import React from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SearchChatListItem = (props?: SearchChatListItemProps) => {
+const SearchChatListItem = () => {
   const theme = useTheme();
   return (
     <ListItem>

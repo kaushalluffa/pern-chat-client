@@ -1,0 +1,93 @@
+import { useThemeContext } from "@/contexts/ThemeContextProvider";
+import {
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Popover,
+  useTheme,
+} from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { Contrast, Logout } from "@mui/icons-material";
+import SettingIcon from "@mui/icons-material/Settings";
+import useAuth from "@/hooks/useAuth";
+
+const SettingsMenu = ({
+  settingsAnchorEl,
+  setSettingsAnchorEl,
+}: {
+  settingsAnchorEl: HTMLElement | null;
+  setSettingsAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+}) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { mode, handleSetTheme } = useThemeContext();
+  const { logout } = useAuth();
+
+  if (settingsAnchorEl) {
+    return (
+      <Popover
+        open={Boolean(settingsAnchorEl)}
+        anchorEl={settingsAnchorEl}
+        onClose={() => {
+          setSettingsAnchorEl(null);
+        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              handleSetTheme(mode === "light" ? "dark" : "light");
+            }}
+          >
+            <ListItemIcon>
+              {mode === "light" ? <DarkModeIcon /> : <Contrast />}
+            </ListItemIcon>
+            <ListItemText
+              primaryTypographyProps={{ color: theme.palette.text.secondary }}
+            >
+              Switch to {mode === "light" ? "dark" : "light"} mode
+            </ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              navigate("/settings");
+            }}
+          >
+            <ListItemIcon>
+              <SettingIcon />
+            </ListItemIcon>
+            <ListItemText
+              primaryTypographyProps={{ color: theme.palette.text.secondary }}
+            >
+              Settings
+            </ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              logout();
+            }}
+          >
+            <ListItemIcon>
+              <Logout />
+            </ListItemIcon>
+            <ListItemText
+              primaryTypographyProps={{ color: theme.palette.text.secondary }}
+            >
+              Logout
+            </ListItemText>
+          </ListItemButton>
+        </ListItem>
+      </Popover>
+    );
+  }
+  return null;
+};
+
+export default SettingsMenu;

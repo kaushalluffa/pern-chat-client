@@ -1,11 +1,11 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import ResponsiveDrawer from "./components/ResponsiveDrawer/ResponsiveDrawer";
+import ResponsiveChatDrawer from "./components/ResponsiveChatDrawer/ResponsiveChatDrawer";
 
 function App() {
   return (
     <Grid container alignItems="center" flexDirection="row">
-      <ResponsiveDrawer />
+      <ResponsiveChatDrawer />
     </Grid>
   );
 }

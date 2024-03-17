@@ -1,10 +1,10 @@
 import { Divider, Drawer, Grid, List } from "@mui/material";
 import React from "react";
-import { ChatListDrawerProps, Conversation } from "@/utils/types";
-import ChatListItem from "../ChatListItem/ChatListItem";
+import { ChatListDrawerProps } from "@/utils/types";
 import ChatListHeading from "../ChatListHeading/ChatListHeading";
 import SearchChatListItem from "../SearchChatListItem/SearchChatListItem";
 import ChatListHeader from "../ChatListHeader/ChatListHeader";
+import ChatListItems from "./ChatListItems";
 
 const ChatListDrawer = ({
   conversations,
@@ -36,16 +36,11 @@ const ChatListDrawer = ({
           <SearchChatListItem />
           <Divider />
           <ChatListHeading />
-          {conversations?.map((conversation: Conversation) => {
-            return (
-              <ChatListItem
-                key={conversation?.id}
-                conversation={conversation}
-                currentConversation={currentConversation}
-                loggedInUser={loggedInUser}
-              />
-            );
-          })}
+          <ChatListItems
+            conversations={conversations}
+            loggedInUser={loggedInUser}
+            currentConversation={currentConversation}
+          />
         </List>
       </Drawer>
     </Grid>

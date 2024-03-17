@@ -8,7 +8,7 @@ import ChatListDrawer from "../ChatListDrawer/ChatListDrawer";
 import ConversationContainer from "../ConversationContainer/ConversationContainer";
 import NoChatOpen from "../NoChatOpen/NoChatOpen";
 const drawerWidth = 320;
-export default function ResponsiveDrawer() {
+export default function ResponsiveChatDrawer() {
   const { state } = useLocation();
   const { loggedInUser } = useAuthContext();
   const [conversations, setConversations] = useState([]);

@@ -80,12 +80,12 @@ const SendMessageContainer = ({
                   sx={{ color: theme.palette.success.light }}
                   onClick={() => {
                     sendMessage({
-                      conversationId: currentConversation?.id,
+                      conversationId: currentConversation?.id as string,
                       messageBody,
                       senderId: currentConversation?.members?.find(
                         (member: Member) =>
                           member?.userId === loggedInUser?.user?.id
-                      )?.id,
+                      )?.id as string,
                     }).then(() => {
                       return setMessageBody("");
                     });
