@@ -1,4 +1,11 @@
-import { Grid, IconButton, Popover, TextField } from "@mui/material";
+import {
+  Divider,
+  Grid,
+  IconButton,
+  Popover,
+  TextField,
+  useTheme,
+} from "@mui/material";
 import React, { useState } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
@@ -12,86 +19,96 @@ const SendMessageContainer = ({
   currentConversation,
   loggedInUser,
 }: SendMessageContainerProps) => {
+  const theme = useTheme();
   const [openEmojiPicker, setOpenEmojiPicker] = useState<HTMLElement | null>(
     null
   );
   const [messageBody, setMessageBody] = useState<string>("");
   return (
-    <Grid
-      item
-      px={5}
-      py={1}
-      display="flex"
-      alignItems="center"
-      gap={2}
-      sx={{ bgcolor: "#EFEFFD" }}
-    >
-      <TextField
-        value={messageBody}
-        placeholder="Send message"
-        size="small"
-        fullWidth
-        multiline
-        maxRows={2}
-        sx={{
-          "& .MuiOutlinedInput-root": {
-            borderRadius: 4,
-          },
-        }}
-        onChange={(
-          event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          setMessageBody(event?.target?.value);
-        }}
-        InputProps={{
-          startAdornment: (
-            <IconButton sx={{ bgcolor: "#EFEFFD", color: "#615EF0" }}>
-              <AttachFileIcon />
-            </IconButton>
-          ),
-          endAdornment: (
-            <Grid item display="flex" alignItems="center" gap={1}>
-              <IconButton
-                onClick={(
-                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-                ) => {
-                  setOpenEmojiPicker(event?.currentTarget);
-                }}
-              >
-                <EmojiEmotionsIcon />
+    <>
+      <Divider />
+      <Grid item px={5} py={1} display="flex" alignItems="center" gap={2}>
+        <TextField
+          value={messageBody}
+          placeholder="Send message"
+          size="small"
+          fullWidth
+          multiline
+          maxRows={2}
+          sx={{
+            "& .MuiInput-underline:after": {
+              borderBottomColor: theme.palette.divider,
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.text.secondary,
+              borderRadius: 4,
+              "& fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.divider,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.divider,
+              },
+            },
+          }}
+          onChange={(
+            event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
+            setMessageBody(event?.target?.value);
+          }}
+          InputProps={{
+            startAdornment: (
+              <IconButton sx={{ color: theme.palette.success.main }}>
+                <AttachFileIcon />
               </IconButton>
-              <IconButton
-                sx={{ bgcolor: "#EFEFFD", color: "#615EF0" }}
-                onClick={() => {
-                  sendMessage({
-                    conversationId: currentConversation?.id,
-                    messageBody,
-                    senderId: currentConversation?.members?.find(
-                      (member: Member) =>
-                        member?.userId === loggedInUser?.user?.id
-                    )?.id,
-                  }).then(() => {
-                    return setMessageBody("");
-                  });
-                }}
-              >
-                <OutboundIcon />
-              </IconButton>
-            </Grid>
-          ),
-        }}
-      />
+            ),
+            endAdornment: (
+              <Grid item display="flex" alignItems="center" gap={1}>
+                <IconButton
+                  sx={{ color: theme.palette.warning.main }}
+                  onClick={(
+                    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                  ) => {
+                    setOpenEmojiPicker(event?.currentTarget);
+                  }}
+                >
+                  <EmojiEmotionsIcon />
+                </IconButton>
+                <IconButton
+                  sx={{ color: theme.palette.success.light }}
+                  onClick={() => {
+                    sendMessage({
+                      conversationId: currentConversation?.id,
+                      messageBody,
+                      senderId: currentConversation?.members?.find(
+                        (member: Member) =>
+                          member?.userId === loggedInUser?.user?.id
+                      )?.id,
+                    }).then(() => {
+                      return setMessageBody("");
+                    });
+                  }}
+                >
+                  <OutboundIcon />
+                </IconButton>
+              </Grid>
+            ),
+          }}
+        />
 
-      {Boolean(openEmojiPicker) && (
-        <Popover
-          anchorEl={openEmojiPicker}
-          open={Boolean(openEmojiPicker)}
-          onClose={() => setOpenEmojiPicker(null)}
-        >
-          <EmojiPicker data={data} onEmojiSelect={console.log} />
-        </Popover>
-      )}
-    </Grid>
+        {Boolean(openEmojiPicker) && (
+          <Popover
+            anchorEl={openEmojiPicker}
+            open={Boolean(openEmojiPicker)}
+            onClose={() => setOpenEmojiPicker(null)}
+          >
+            <EmojiPicker data={data} onEmojiSelect={console.log} />
+          </Popover>
+        )}
+      </Grid>
+    </>
   );
 };
 

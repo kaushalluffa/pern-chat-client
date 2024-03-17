@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Signup from "../auth/Signup";
 import Login from "../auth/Login";
 import Settings from "../Settings/Settings";
-import FullScreenLoader from "../shared/FullScreenLoader";
+import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
 
 const AllRoutes = () => {
   return (

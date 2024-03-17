@@ -2,9 +2,9 @@ import { Divider, Drawer, Grid, List } from "@mui/material";
 import React from "react";
 import { ChatListDrawerProps, Conversation } from "@/utils/types";
 import ChatListItem from "../ChatListItem/ChatListItem";
-import ChatListHeading from "./ChatListHeading";
-import SearchChatListItem from "./SearchChatListItem";
-import ChatListHeader from "./ChatListHeader";
+import ChatListHeading from "../ChatListHeading/ChatListHeading";
+import SearchChatListItem from "../SearchChatListItem/SearchChatListItem";
+import ChatListHeader from "../ChatListHeader/ChatListHeader";
 
 const ChatListDrawer = ({
   conversations,
@@ -17,9 +17,6 @@ const ChatListDrawer = ({
       sx={{
         width: { sm: drawerWidth },
         flexShrink: { sm: 0 },
-        bgcolor: "#EFEFFD",
-        backgroundImage: `radial-gradient(#615EF0 2px, #fff 2px)`,
-        backgroundSize: "40px 40px",
       }}
     >
       <Drawer
@@ -30,8 +27,6 @@ const ChatListDrawer = ({
             boxSizing: "border-box",
             width: drawerWidth,
           },
-          backgroundImage: `radial-gradient(#615EF0 2px, #fff 2px)`,
-          backgroundSize: "40px 40px",
         }}
         open
       >
@@ -39,6 +34,7 @@ const ChatListDrawer = ({
         <Divider />
         <List>
           <SearchChatListItem />
+          <Divider />
           <ChatListHeading />
           {conversations?.map((conversation: Conversation) => {
             return (

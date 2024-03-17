@@ -6,13 +6,15 @@ import {
   Paper,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import CustomButton from "../shared/CustomButton";
+import CustomButton from "../CustomButton/CustomButton";
 
 const Settings = () => {
+  const theme = useTheme();
   const [changePasswordData, setChangePasswordData] = useState<{
     oldPassword: string;
     newPassword: string;
@@ -38,9 +40,6 @@ const Settings = () => {
     <Grid
       container
       sx={{
-        backgroundImage: `radial-gradient(#444cf7 2px, transparent 2px), radial-gradient(#444cf7 2px, transparent 2px)`,
-        backgroundSize: " 80px 80px",
-        backgroundPosition: "0 0,40px 40px",
         height: "100vh",
         width: "100%",
       }}
@@ -50,17 +49,23 @@ const Settings = () => {
       <Container maxWidth="sm">
         <Grid container flexDirection="column" p={4} gap={3} component={Paper}>
           <Grid container flexDirection="column" gap={1}>
-            <Typography variant="h5">Account Settings</Typography>
-            <Typography variant="body1">
+            <Typography color={theme.palette.text.secondary} variant="h5">
+              Account Settings
+            </Typography>
+            <Typography color={theme.palette.text.secondary} variant="body1">
               This is the account settings page.
             </Typography>
           </Grid>
           <Grid container alignItems="center" gap={2}>
             <Avatar />
-            <Typography variant="body2">Click on picture to update</Typography>
+            <Typography color={theme.palette.text.secondary} variant="body2">
+              Click on picture to update
+            </Typography>
           </Grid>
           <Grid container flexDirection="column" gap={2}>
-            <Typography variant="h5">Change Name</Typography>
+            <Typography color={theme.palette.text.secondary} variant="h5">
+              Change Name
+            </Typography>
             <TextField
               size="small"
               label="Your name"
@@ -75,7 +80,9 @@ const Settings = () => {
             />
           </Grid>
           <Grid container flexDirection="column" gap={2}>
-            <Typography variant="h5">Change Password</Typography>
+            <Typography color={theme.palette.text.secondary} variant="h5">
+              Change Password
+            </Typography>
             <TextField
               size="small"
               label="Current Password"

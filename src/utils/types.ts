@@ -131,7 +131,5 @@ export interface CreateConversationData {
   email: string;
   id: string;
   name: string;
-  imageUrl: null;
-  createdAt?: string;
-  password?: string;
+  imageUrl: string | null;
 }

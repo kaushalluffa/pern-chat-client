@@ -1,13 +1,21 @@
-import { Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
+import {
+  Grid,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import CustomButton from "../shared/CustomButton";
+import CustomButton from "../CustomButton/CustomButton";
 import useAuth from "@/hooks/useAuth";
 import { useAuthContext } from "@/contexts/AuthContext";
-import FullScreenLoader from "../shared/FullScreenLoader";
+import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
 const Signup = () => {
+  const theme = useTheme();
   const { showLoading } = useAuthContext();
   const { signupData, handleSignupDataChange, handleSignup, loading } =
     useAuth();
@@ -31,7 +39,9 @@ const Signup = () => {
         variant="elevation"
         p={{ xs: 2, sm: 4, md: 8 }}
       >
-        <Typography variant="h5">Sign Up</Typography>
+        <Typography variant="h5" color={theme.palette.text.secondary}>
+          Sign Up
+        </Typography>
         <TextField
           value={signupData?.email}
           size="small"

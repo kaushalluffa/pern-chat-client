@@ -1,3 +1,4 @@
+import stringAvatar from "@/utils/stringAvatar";
 import { ChatListItemProps, Member } from "@/utils/types";
 import {
   Avatar,
@@ -5,6 +6,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +16,7 @@ const ChatListItem = ({
   loggedInUser,
   currentConversation,
 }: ChatListItemProps) => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const conversationTitle =
     conversation?.type === "DIRECT_MESSAGE"
@@ -32,7 +35,7 @@ const ChatListItem = ({
         selected={currentConversation?.id === conversation?.id}
         sx={{
           "&.Mui-selected": {
-            bgcolor: "#615EF0",
+            bgcolor: theme.palette.primary.main,
             color: "#fff",
           },
         }}
@@ -41,9 +44,14 @@ const ChatListItem = ({
         focusRipple={false}
       >
         <ListItemIcon>
-          <Avatar src={""} />
+          <Avatar src={""} {...stringAvatar(conversationTitle as string)} />
         </ListItemIcon>
-        <ListItemText primaryTypographyProps={{ variant: "h6" }}>
+        <ListItemText
+          primaryTypographyProps={{
+            variant: "h6",
+            color: theme.palette.text.primary,
+          }}
+        >
           {conversationTitle ?? ""}
         </ListItemText>
       </ListItemButton>

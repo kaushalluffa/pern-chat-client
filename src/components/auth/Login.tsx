@@ -1,13 +1,21 @@
-import { Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
+import {
+  Grid,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import useAuth from "@/hooks/useAuth";
-import CustomButton from "../shared/CustomButton";
+import CustomButton from "../CustomButton/CustomButton";
 import { useAuthContext } from "@/contexts/AuthContext";
-import FullScreenLoader from "../shared/FullScreenLoader";
+import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
 const Login = () => {
+  const theme = useTheme();
   const { showLoading } = useAuthContext();
   const {
     loginData,
@@ -36,7 +44,9 @@ const Login = () => {
         variant="elevation"
         p={{ xs: 2, sm: 4, md: 8 }}
       >
-        <Typography variant="h5">Sign In</Typography>
+        <Typography variant="h5" color={theme.palette.text.secondary}>
+          Sign In
+        </Typography>
         <TextField
           value={loginData?.email}
           onChange={(

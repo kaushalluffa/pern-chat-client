@@ -5,6 +5,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -14,6 +15,7 @@ const CustomAppBar = ({
   drawerWidth,
   currentLoggedInMember,
 }: CustomAppBarProps) => {
+  const theme = useTheme();
   return (
     <AppBar
       position="fixed"
@@ -28,11 +30,18 @@ const CustomAppBar = ({
           <Grid item display="flex" gap={1} alignItems="center">
             <Avatar src={""} />
             <Grid item>
-              <Typography>{currentLoggedInMember?.user?.name}</Typography>
-              <Typography variant="caption">Online</Typography>
+              <Typography color={theme.palette.text.secondary}>
+                {currentLoggedInMember?.user?.name}
+              </Typography>
+              <Typography
+                color={theme.palette.text.secondary}
+                variant="caption"
+              >
+                Online
+              </Typography>
             </Grid>
           </Grid>
-          <IconButton sx={{ bgcolor: "#EFEFFD", color: "#615EF0" }}>
+          <IconButton sx={{ color: theme.palette.text.secondary }}>
             <MoreVertIcon />
           </IconButton>
         </Grid>

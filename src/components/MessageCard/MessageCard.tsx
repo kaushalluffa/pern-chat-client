@@ -1,8 +1,9 @@
 import { MessageCardProps } from "@/utils/types";
-import { Avatar, Grid, IconButton, Typography } from "@mui/material";
+import { Avatar, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import stringAvatar from "../../utils/stringAvatar";
 
 const MessageCard = ({
   message,
@@ -10,6 +11,7 @@ const MessageCard = ({
   passRef,
   messagesEndRef,
 }: MessageCardProps) => {
+  const theme = useTheme();
   return (
     <Grid
       ref={passRef ? messagesEndRef : null}
@@ -31,7 +33,11 @@ const MessageCard = ({
           : "row"
       }
     >
-      <Avatar />
+      <Avatar
+        {...(message?.sender?.user?.imageUrl
+          ? {}
+          : { ...stringAvatar(message?.sender?.user?.name) })}
+      />
 
       <Grid
         item
@@ -40,9 +46,8 @@ const MessageCard = ({
         gap={1}
         p={1}
         sx={{
-          bgcolor: "#615EF0",
+          bgcolor: theme.palette.primary.main,
           borderRadius: 4,
-          color: "#fff",
         }}
       >
         <Grid container spacing={2}>
@@ -55,7 +60,9 @@ const MessageCard = ({
                   justifyContent="space-between"
                 >
                   <Grid item xs zeroMinWidth>
-                    <Typography>{message?.body}</Typography>
+                    <Typography color={theme.palette.text.primary}>
+                      {message?.body}
+                    </Typography>
                   </Grid>
                   <Grid item alignSelf="flex-start">
                     <IconButton sx={{ color: "#FFF" }}>
@@ -74,7 +81,9 @@ const MessageCard = ({
           alignItems="center"
           gap={1}
         >
-          <Typography variant="caption">{new Date().toUTCString()}</Typography>
+          <Typography variant="caption" color={theme.palette.text.primary}>
+            {new Date().toUTCString()}
+          </Typography>
           <DoneAllIcon sx={{ width: 16, height: 16 }} />
         </Grid>
       </Grid>

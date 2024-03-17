@@ -10,7 +10,9 @@ export const getConversation = async () => {
   return response?.data;
 };
 
-export const createConversation = async (data: CreateConversationData[]) => {
+export const createConversation = async (data: {
+  members: CreateConversationData[];
+}) => {
   const response = await axios(
     `${VITE_SERVER_URL as string}/conversation/create`,
     {

@@ -6,18 +6,20 @@ import {
   DialogTitle,
   Grid,
   TextField,
+  useTheme,
 } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-import AddUserListItem from "../shared/AddUserListItem";
+import AddUserListItem from "../AddUserListItem/AddUserListItem";
 import { getAllUsers } from "@/api/users";
 import { createConversation } from "@/api/conversations";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useModalsContext } from "@/contexts/ModalsContext";
-import NoDataAvailable from "../shared/NoDataAvailable";
-import CustomButton from "../shared/CustomButton";
+import NoDataAvailable from "../NoDataAvailable/NoDataAvailable";
+import CustomButton from "../CustomButton/CustomButton";
 
 const StartConversationModal = () => {
+  const theme = useTheme();
   const { loggedInUser } = useAuthContext();
   const { createConversationModal, setCreateConversationModal } =
     useModalsContext();
@@ -79,7 +81,9 @@ const StartConversationModal = () => {
       onClose={handleClose}
       maxWidth="lg"
     >
-      <DialogTitle>Select users to start a converstation</DialogTitle>
+      <DialogTitle color={theme.palette.text.secondary}>
+        Select users to start a converstation
+      </DialogTitle>
       <DialogContent>
         <Grid
           container
@@ -92,11 +96,26 @@ const StartConversationModal = () => {
             size="small"
             placeholder="Search users to start conversation"
             sx={{
+              "& .MuiInput-underline:after": {
+                borderBottomColor: "transparent",
+              },
               "& .MuiOutlinedInput-root": {
                 borderRadius: 4,
+                color: theme.palette.text.secondary,
+                bgcolor: theme.palette.action.hover,
+                "& fieldset": {
+                  borderColor: "transparent",
+                },
+                "&:hover fieldset": {
+                  borderColor: "transparent",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "transparent",
+                },
               },
             }}
             onChange={handleSearchUserChange}
+            variant="outlined"
           />
           <Grid
             item
@@ -116,14 +135,17 @@ const StartConversationModal = () => {
       </DialogContent>
       <DialogActions>
         <CustomButton
-          sx={{ color: "#615EF0", border: 1, borderColor: "#615EF0" }}
-          variant="outlined"
+          sx={{
+            color: theme.palette.text.secondary,
+          }}
+          variant="text"
+          onClick={handleClose}
         >
           Close
         </CustomButton>
         <CustomButton
           variant="contained"
-          sx={{ bgcolor: "#615EF0" }}
+          sx={{ bgcolor: theme.palette.primary.main }}
           onClick={() => {
             handleCreateConversation();
           }}

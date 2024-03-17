@@ -8,16 +8,20 @@ import {
   Popover,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
 import SettingIcon from "@mui/icons-material/Settings";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, Logout } from "@mui/icons-material";
-
+import { Contrast, Home, Logout } from "@mui/icons-material";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 import useAuth from "@/hooks/useAuth";
+import { useThemeContext } from "@/contexts/ThemeContextProvider";
 
 const ChatListHeader = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
+  const { mode, handleSetTheme } = useThemeContext();
   const { logout } = useAuth();
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(
     null
@@ -26,22 +30,26 @@ const ChatListHeader = () => {
     <>
       <Toolbar>
         <Grid container justifyContent="space-between" alignItems="center">
-          <Typography variant="h5">Hi, Kaushal</Typography>
+          <Typography variant="h5" color={theme.palette.text.secondary}>
+            Hi, Kaushal
+          </Typography>
           <Grid item display="flex" alignItems="center" gap={1}>
             <Link to="/">
               <IconButton
+                disableRipple
                 sx={{
-                  color: `#615EF0`,
-                  bgcolor: "#EFEFFD",
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.common.white,
                 }}
               >
                 <Home />
               </IconButton>
             </Link>
             <IconButton
+              disableRipple
               sx={{
-                color: `#615EF0`,
-                bgcolor: "#EFEFFD",
+                bgcolor: theme.palette.primary.main,
+                color: theme.palette.common.white,
               }}
               onClick={(e) => setSettingsAnchorEl(e.currentTarget)}
             >
@@ -62,13 +70,33 @@ const ChatListHeader = () => {
           <ListItem>
             <ListItemButton
               onClick={() => {
+                handleSetTheme(mode === "light" ? "dark" : "light");
+              }}
+            >
+              <ListItemIcon>
+                {mode === "light" ? <DarkModeIcon /> : <Contrast />}
+              </ListItemIcon>
+              <ListItemText
+                primaryTypographyProps={{ color: theme.palette.text.secondary }}
+              >
+                Switch to {mode === "light" ? "dark" : "light"} mode
+              </ListItemText>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton
+              onClick={() => {
                 navigate("/settings");
               }}
             >
               <ListItemIcon>
                 <SettingIcon />
               </ListItemIcon>
-              <ListItemText>Settings</ListItemText>
+              <ListItemText
+                primaryTypographyProps={{ color: theme.palette.text.secondary }}
+              >
+                Settings
+              </ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -80,7 +108,11 @@ const ChatListHeader = () => {
               <ListItemIcon>
                 <Logout />
               </ListItemIcon>
-              <ListItemText>Logout</ListItemText>
+              <ListItemText
+                primaryTypographyProps={{ color: theme.palette.text.secondary }}
+              >
+                Logout
+              </ListItemText>
             </ListItemButton>
           </ListItem>
         </Popover>

@@ -15,9 +15,6 @@ const MessagesList = ({
       sx={{
         overflowY: "scroll",
         flexWrap: "nowrap",
-        backgroundImage: `radial-gradient(#444cf7 2px, transparent 2px), radial-gradient(#444cf7 2px, transparent 2px)`,
-        backgroundSize: " 80px 80px",
-        backgroundPosition: "0 0,40px 40px",
       }}
       p={2}
       flexDirection="column"
