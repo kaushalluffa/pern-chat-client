@@ -25,7 +25,11 @@ const ChatListItem = ({
         )?.user?.name
       : conversation?.groupTitle;
   return (
-    <ListItem key={conversation?.id} disablePadding>
+    <ListItem
+      key={conversation?.id}
+      disablePadding
+      sx={{ bgcolor: theme.palette.divider }}
+    >
       <ListItemButton
         onClick={() => {
           navigate(`/chat/${conversation?.id}`, {

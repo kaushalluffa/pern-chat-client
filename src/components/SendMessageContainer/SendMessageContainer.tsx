@@ -14,12 +14,14 @@ import { Member, SendMessageContainerProps } from "@/utils/types";
 import OutboundIcon from "@mui/icons-material/Outbound";
 import EmojiPicker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
+import useCloudinaryFileUpload from "@/hooks/useCloudinaryFileUpload";
 
 const SendMessageContainer = ({
   currentConversation,
   loggedInUser,
 }: SendMessageContainerProps) => {
   const theme = useTheme();
+  const { hanleOpenCloudinaryWidget } = useCloudinaryFileUpload();
   const [openEmojiPicker, setOpenEmojiPicker] = useState<HTMLElement | null>(
     null
   );
@@ -60,7 +62,12 @@ const SendMessageContainer = ({
           }}
           InputProps={{
             startAdornment: (
-              <IconButton sx={{ color: theme.palette.success.main }}>
+              <IconButton
+                sx={{ color: theme.palette.success.main }}
+                onClick={() => {
+                  hanleOpenCloudinaryWidget && hanleOpenCloudinaryWidget();
+                }}
+              >
                 <AttachFileIcon />
               </IconButton>
             ),

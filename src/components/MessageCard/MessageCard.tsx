@@ -1,9 +1,18 @@
 import { MessageCardProps } from "@/utils/types";
-import { Avatar, Grid, IconButton, Typography, useTheme } from "@mui/material";
-import React from "react";
+import {
+  Avatar,
+  Grid,
+  IconButton,
+  MenuItem,
+  Popover,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import stringAvatar from "../../utils/stringAvatar";
+import { Delete } from "@mui/icons-material";
 
 const MessageCard = ({
   message,
@@ -12,85 +21,128 @@ const MessageCard = ({
   messagesEndRef,
 }: MessageCardProps) => {
   const theme = useTheme();
+  const [messageCardAnchorEl, setMessageCardAnchorEl] =
+    useState<HTMLElement | null>(null);
   return (
-    <Grid
-      ref={passRef ? messagesEndRef : null}
-      key={message?.id}
-      p={1}
-      item
-      display="flex"
-      alignItems="center"
-      gap={2}
-      maxWidth="35%"
-      alignSelf={
-        message?.sender?.userId === loggedInUser?.user?.id
-          ? "flex-end"
-          : "flex-start"
-      }
-      flexDirection={
-        message?.sender?.userId === loggedInUser?.user?.id
-          ? "row-reverse"
-          : "row"
-      }
-    >
-      <Avatar
-        {...(message?.sender?.user?.imageUrl
-          ? {}
-          : message?.sender?.user?.name
-          ? { ...stringAvatar(message?.sender?.user?.name) }
-          : {})}
-        sx={{ color: theme.palette.text.primary }}
-      />
-
+    <>
       <Grid
+        ref={passRef ? messagesEndRef : null}
+        key={message?.id}
+        p={1}
         item
         display="flex"
-        flexDirection="column"
-        gap={1}
-        p={1}
-        sx={{
-          bgcolor: theme.palette.primary.main,
-          borderRadius: 4,
-        }}
+        alignItems="center"
+        gap={2}
+        maxWidth="35%"
+        alignSelf={
+          message?.sender?.userId === loggedInUser?.user?.id
+            ? "flex-end"
+            : "flex-start"
+        }
+        flexDirection={
+          message?.sender?.userId === loggedInUser?.user?.id
+            ? "row-reverse"
+            : "row"
+        }
       >
-        <Grid container spacing={2}>
-          <Grid item xs zeroMinWidth>
-            <Grid container spacing={2}>
-              <Grid item zeroMinWidth width="100%">
-                <Grid
-                  container
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Grid item xs zeroMinWidth>
-                    <Typography color={theme.palette.text.primary}>
-                      {message?.body}
-                    </Typography>
-                  </Grid>
-                  <Grid item alignSelf="flex-start">
-                    <IconButton sx={{ color: "#FFF" }}>
-                      <MoreVertIcon />
-                    </IconButton>
+        <Avatar
+          {...(message?.sender?.user?.imageUrl
+            ? {}
+            : message?.sender?.user?.name
+            ? { ...stringAvatar(message?.sender?.user?.name) }
+            : {})}
+          sx={{ color: theme.palette.text.primary }}
+        />
+
+        <Grid
+          item
+          display="flex"
+          flexDirection="column"
+          gap={1}
+          p={1}
+          sx={{
+            bgcolor:
+              message?.sender?.userId === loggedInUser?.user?.id
+                ? theme.palette.primary.main
+                : theme.palette.grey[900],
+            borderRadius: 4,
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs zeroMinWidth>
+              <Grid container spacing={2}>
+                <Grid item zeroMinWidth width="100%">
+                  <Grid
+                    container
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Grid item xs zeroMinWidth>
+                      <Typography color={theme.palette.text.primary}>
+                        {message?.body}
+                      </Typography>
+                    </Grid>
+                    <Grid item alignSelf="flex-start">
+                      <IconButton
+                        sx={{ color: "#FFF" }}
+                        onClick={(
+                          event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                        ) => {
+                          setMessageCardAnchorEl(event.currentTarget);
+                        }}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid
-          item
-          display="flex"
-          justifyContent={"flex-end"}
-          alignItems="center"
-          gap={1}
-        >
-          <Typography variant="caption" color={theme.palette.text.primary}>
-            {new Date().toUTCString()}
-          </Typography>
-          <DoneAllIcon sx={{ width: 16, height: 16 }} />
+          <Grid
+            item
+            display="flex"
+            justifyContent={"flex-end"}
+            alignItems="center"
+            gap={1}
+          >
+            <Typography variant="caption" color={theme.palette.text.primary}>
+              {new Date().toUTCString()}
+            </Typography>
+            <DoneAllIcon sx={{ width: 16, height: 16 }} />
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      {Boolean(messageCardAnchorEl) && (
+        <Popover
+          open={Boolean(messageCardAnchorEl)}
+          anchorEl={messageCardAnchorEl}
+          onClose={() => {
+            setMessageCardAnchorEl(null);
+          }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <MenuItem>
+            <Grid
+              item
+              display="flex"
+              alignItems="center"
+              gap={1}
+              onClick={() => {
+                setMessageCardAnchorEl(null);
+              }}
+            >
+              <IconButton disableRipple>
+                <Delete color="error" />
+              </IconButton>
+              <Typography color={theme.palette.text.secondary}>
+                Delete
+              </Typography>
+            </Grid>
+          </MenuItem>
+        </Popover>
+      )}
+    </>
   );
 };
 

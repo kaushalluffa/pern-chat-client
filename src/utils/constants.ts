@@ -1,3 +1,7 @@
 export const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
 export const VITE_SIGNUP_SUCCESS_REDIRECT = import.meta.env
   .VITE_SIGNUP_SUCCESS_REDIRECT;
+export const VITE_COMPLETE_CLOUDINARY_UPLOAD_ENDPOING = `${
+  import.meta.env.VITE_CLOUDINARY_UPLOAD_ENDPOINT
+}/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`;
+export const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
