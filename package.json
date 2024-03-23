@@ -12,8 +12,6 @@
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
-    "@cloudinary/react": "^1.13.0",
-    "@cloudinary/url-gen": "^1.19.0",
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
     "@emotion/react": "^11.11.3",
@@ -24,6 +22,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.6.7",
     "emoji-mart": "^5.5.2",
+    "imagekitio-react": "^4.0.0",
     "jwt-decode": "^4.0.0",
     "react": "^18",
     "react-cookie": "^7.1.0",

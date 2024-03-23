@@ -7,6 +7,7 @@ export interface SignupData {
   cPassword: string;
   showP: boolean;
   showCP: boolean;
+  imageUrl: string;
 }
 export interface User {
   id: string;
@@ -132,4 +133,22 @@ export interface CreateConversationData {
   id: string;
   name: string;
   imageUrl: string | null;
+}
+export interface VersionInfo {
+  id: string;
+  name: string;
+}
+
+export interface File {
+  fileId: string;
+  name: string;
+  size: number;
+  versionInfo: VersionInfo;
+  filePath: string;
+  url: string;
+  fileType: string;
+  height: number;
+  width: number;
+  thumbnailUrl: string;
+  AITags: null;
 }

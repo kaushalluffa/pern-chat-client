@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  Avatar,
   Grid,
   IconButton,
   Paper,
@@ -6,16 +8,24 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CustomButton from "../CustomButton/CustomButton";
 import useAuth from "@/hooks/useAuth";
+import { useImageKitContext } from "@/contexts/ImageKitContext";
 
 const Signup = () => {
   const theme = useTheme();
   const { signupData, handleSignupDataChange, handleSignup, loading } =
     useAuth();
+  const { ikUploadRef, fileUrl, uploadImgLoading, setFileUrl } =
+    useImageKitContext();
+  useEffect(() => {
+    handleSignupDataChange({ key: "imageUrl", value: fileUrl ?? "" });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileUrl]);
 
   return (
     <Grid container justifyContent="center" alignItems="center">
@@ -31,6 +41,22 @@ const Signup = () => {
         <Typography variant="h5" color={theme.palette.text.secondary}>
           Sign Up
         </Typography>
+        <Grid item display="flex" alignItems="center" gap={1}>
+          <Avatar src={signupData?.imageUrl} />
+
+          <CustomButton
+            loading={uploadImgLoading}
+            disabled={uploadImgLoading}
+            onClick={() => {
+              ikUploadRef &&
+                ikUploadRef?.current &&
+                ikUploadRef?.current?.click();
+            }}
+            variant="text"
+          >
+            Add profile picture
+          </CustomButton>
+        </Grid>
         <TextField
           value={signupData?.email}
           size="small"
@@ -193,14 +219,15 @@ const Signup = () => {
           }}
         />
         <CustomButton
-          loading={loading === "signup"}
-          disabled={loading === "signup"}
+          loading={uploadImgLoading || loading === "signup"}
+          disabled={uploadImgLoading || loading === "signup"}
           onClick={() => {
             handleSignup();
+            setFileUrl(null);
           }}
           variant="contained"
         >
-          Login
+          Signup
         </CustomButton>
       </Grid>
     </Grid>

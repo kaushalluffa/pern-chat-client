@@ -9,26 +9,40 @@ import ConversationContextProvider from "./contexts/ConversationContext";
 import ModalsContextProvider from "./contexts/ModalsContext";
 import AllRoutes from "./components/RoutesCollection/AllRoutes";
 import ThemeContextProvider from "./contexts/ThemeContextProvider";
+import { IKContext } from "imagekitio-react";
+import {
+  VITE_IMAGE_KIT_PUBLIC_KEY,
+  VITE_IMAGE_KIT_URL_ENDPOINT,
+} from "./utils/constants";
+import { authenticator } from "./utils/imageKitAuthenticatorHelper";
+import ImageKitContextProvider from "./contexts/ImageKitContext";
 const container = document.getElementById("root");
 
 if (!container) throw new Error("Could not find root element with id 'root'");
 
 const root = createRoot(container);
-
 root.render(
   <React.StrictMode>
     <ThemeContextProvider>
       <BrowserRouter>
-        <AuthContextProvider>
-          <SocketContextProvider>
-            <ConversationContextProvider>
-              <CssBaseline />
-              <ModalsContextProvider>
-                <AllRoutes />
-              </ModalsContextProvider>
-            </ConversationContextProvider>
-          </SocketContextProvider>
-        </AuthContextProvider>
+        <IKContext
+          urlEndpoint={VITE_IMAGE_KIT_URL_ENDPOINT}
+          publicKey={VITE_IMAGE_KIT_PUBLIC_KEY}
+          authenticator={authenticator}
+        >
+          <ImageKitContextProvider>
+            <AuthContextProvider>
+              <SocketContextProvider>
+                <ConversationContextProvider>
+                  <CssBaseline />
+                  <ModalsContextProvider>
+                    <AllRoutes />
+                  </ModalsContextProvider>
+                </ConversationContextProvider>
+              </SocketContextProvider>
+            </AuthContextProvider>
+          </ImageKitContextProvider>
+        </IKContext>
       </BrowserRouter>
     </ThemeContextProvider>
   </React.StrictMode>

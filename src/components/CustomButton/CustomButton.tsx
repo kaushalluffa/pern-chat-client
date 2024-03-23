@@ -4,7 +4,13 @@ interface CustomButtonProps extends ButtonProps {
   loading?: boolean;
 }
 const CustomButton = ({ loading, children, ...rest }: CustomButtonProps) => {
-  return <Button {...rest}>{loading ? <CircularProgress /> : children}</Button>;
+  return loading ? (
+    <Button {...rest}>
+      <CircularProgress size={20} />
+    </Button>
+  ) : (
+    <Button {...rest}>{children}</Button>
+  );
 };
 
 export default CustomButton;

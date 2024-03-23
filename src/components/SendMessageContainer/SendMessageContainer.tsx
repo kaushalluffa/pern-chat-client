@@ -6,7 +6,7 @@ import {
   TextField,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { sendMessage } from "@/api/messages";
@@ -14,18 +14,24 @@ import { Member, SendMessageContainerProps } from "@/utils/types";
 import OutboundIcon from "@mui/icons-material/Outbound";
 import EmojiPicker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
-import useCloudinaryFileUpload from "@/hooks/useCloudinaryFileUpload";
+import { useImageKitContext } from "@/contexts/ImageKitContext";
 
 const SendMessageContainer = ({
   currentConversation,
   loggedInUser,
 }: SendMessageContainerProps) => {
   const theme = useTheme();
-  const { hanleOpenCloudinaryWidget } = useCloudinaryFileUpload();
+  const { ikUploadRef, uploadImgLoading, fileUrl, setFileUrl } =
+    useImageKitContext();
   const [openEmojiPicker, setOpenEmojiPicker] = useState<HTMLElement | null>(
     null
   );
   const [messageBody, setMessageBody] = useState<string>("");
+  useEffect(() => {
+    if (fileUrl) {
+      setMessageBody(fileUrl);
+    }
+  }, [fileUrl]);
   return (
     <>
       <Divider />
@@ -63,9 +69,12 @@ const SendMessageContainer = ({
           InputProps={{
             startAdornment: (
               <IconButton
+                disabled={uploadImgLoading}
                 sx={{ color: theme.palette.success.main }}
                 onClick={() => {
-                  hanleOpenCloudinaryWidget && hanleOpenCloudinaryWidget();
+                  ikUploadRef &&
+                    ikUploadRef?.current &&
+                    ikUploadRef?.current?.click();
                 }}
               >
                 <AttachFileIcon />
@@ -84,6 +93,7 @@ const SendMessageContainer = ({
                   <EmojiEmotionsIcon />
                 </IconButton>
                 <IconButton
+                  disabled={uploadImgLoading}
                   sx={{ color: theme.palette.success.light }}
                   onClick={() => {
                     sendMessage({
@@ -94,6 +104,7 @@ const SendMessageContainer = ({
                           member?.userId === loggedInUser?.user?.id
                       )?.id as string,
                     }).then(() => {
+                      setFileUrl(null);
                       return setMessageBody("");
                     });
                   }}

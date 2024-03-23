@@ -19,6 +19,7 @@ export default function useAuth() {
     showP: false,
     showCP: false,
     fullName: "",
+    imageUrl: "",
   });
   const [loginData, setLoginData] = useState<{
     email: string;
