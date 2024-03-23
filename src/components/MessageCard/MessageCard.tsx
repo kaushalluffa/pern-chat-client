@@ -13,6 +13,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import stringAvatar from "../../utils/stringAvatar";
 import { Delete } from "@mui/icons-material";
+import { checkIfMessageIsFileUrl } from "@/utils/helpers";
+import ViewAttachedMedia from "../ViewAttachedMedia/ViewAttachedMedia";
 
 const MessageCard = ({
   message,
@@ -23,6 +25,7 @@ const MessageCard = ({
   const theme = useTheme();
   const [messageCardAnchorEl, setMessageCardAnchorEl] =
     useState<HTMLElement | null>(null);
+  const isFileUrl = checkIfMessageIsFileUrl(message?.body);
   return (
     <>
       <Grid
@@ -78,9 +81,13 @@ const MessageCard = ({
                     justifyContent="space-between"
                   >
                     <Grid item xs zeroMinWidth>
-                      <Typography color={theme.palette.text.primary}>
-                        {message?.body}
-                      </Typography>
+                      {isFileUrl ? (
+                        <ViewAttachedMedia src={message?.body} />
+                      ) : (
+                        <Typography color={theme.palette.text.primary}>
+                          {message?.body}
+                        </Typography>
+                      )}
                     </Grid>
                     <Grid item alignSelf="flex-start">
                       <IconButton

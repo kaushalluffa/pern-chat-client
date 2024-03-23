@@ -1,4 +1,7 @@
 import {
+  Dialog,
+  DialogActions,
+  DialogContent,
   Divider,
   Grid,
   IconButton,
@@ -10,11 +13,13 @@ import React, { useEffect, useState } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { sendMessage } from "@/api/messages";
-import { Member, SendMessageContainerProps } from "@/utils/types";
+import { EmojiData, Member, SendMessageContainerProps } from "@/utils/types";
 import OutboundIcon from "@mui/icons-material/Outbound";
 import EmojiPicker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import { useImageKitContext } from "@/contexts/ImageKitContext";
+import ViewAttachedMedia from "../ViewAttachedMedia/ViewAttachedMedia";
+import CustomButton from "../CustomButton/CustomButton";
 
 const SendMessageContainer = ({
   currentConversation,
@@ -26,10 +31,13 @@ const SendMessageContainer = ({
   const [openEmojiPicker, setOpenEmojiPicker] = useState<HTMLElement | null>(
     null
   );
+  const [openViewAttachedMediaModal, setOpenViewAttachedMediaModal] =
+    useState<boolean>(false);
   const [messageBody, setMessageBody] = useState<string>("");
   useEffect(() => {
     if (fileUrl) {
       setMessageBody(fileUrl);
+      setOpenViewAttachedMediaModal(true);
     }
   }, [fileUrl]);
   return (
@@ -122,10 +130,56 @@ const SendMessageContainer = ({
             open={Boolean(openEmojiPicker)}
             onClose={() => setOpenEmojiPicker(null)}
           >
-            <EmojiPicker data={data} onEmojiSelect={console.log} />
+            <EmojiPicker
+              data={data}
+              onEmojiSelect={(emojiData: EmojiData) => {
+                setMessageBody((prev) => `${prev} ${emojiData?.native}`);
+              }}
+            />
           </Popover>
         )}
       </Grid>
+      {openViewAttachedMediaModal && (
+        <Dialog
+          open={openViewAttachedMediaModal}
+          onClose={() => setOpenViewAttachedMediaModal(false)}
+        >
+          <DialogContent>
+            <ViewAttachedMedia src={messageBody} />
+          </DialogContent>
+          <DialogActions>
+            <CustomButton
+              variant="outlined"
+              onClick={() => {
+                setMessageBody("");
+                setFileUrl(null);
+                setOpenViewAttachedMediaModal(false);
+              }}
+            >
+              Cancel
+            </CustomButton>
+            <CustomButton
+              variant="contained"
+              onClick={() => {
+                sendMessage({
+                  conversationId: currentConversation?.id as string,
+                  messageBody,
+                  senderId: currentConversation?.members?.find(
+                    (member: Member) =>
+                      member?.userId === loggedInUser?.user?.id
+                  )?.id as string,
+                }).then(() => {
+                  setFileUrl(null);
+                  setOpenViewAttachedMediaModal(false);
+                  setMessageBody("");
+                });
+              }}
+            >
+              Send
+            </CustomButton>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 };
