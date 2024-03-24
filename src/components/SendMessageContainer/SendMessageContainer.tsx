@@ -1,7 +1,4 @@
 import {
-  Dialog,
-  DialogActions,
-  DialogContent,
   Divider,
   Grid,
   IconButton,
@@ -9,43 +6,37 @@ import {
   TextField,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import { sendMessage } from "@/api/messages";
-import { EmojiData, Member, SendMessageContainerProps } from "@/utils/types";
+import { EmojiData } from "@/utils/types";
 import OutboundIcon from "@mui/icons-material/Outbound";
 import EmojiPicker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
-import { useImageKitContext } from "@/contexts/ImageKitContext";
-import ViewAttachedMedia from "../ViewAttachedMedia/ViewAttachedMedia";
-import CustomButton from "../CustomButton/CustomButton";
+import useMessages from "@/hooks/useMessages";
+import ViewAttachedFileModal from "./ViewAttachedFileModal";
 
-const SendMessageContainer = ({
-  currentConversation,
-  loggedInUser,
-}: SendMessageContainerProps) => {
+const SendMessageContainer = () => {
   const theme = useTheme();
-  const { ikUploadRef, uploadImgLoading, fileUrl, setFileUrl } =
-    useImageKitContext();
-  const [openEmojiPicker, setOpenEmojiPicker] = useState<HTMLElement | null>(
-    null
-  );
-  const [openViewAttachedMediaModal, setOpenViewAttachedMediaModal] =
-    useState<boolean>(false);
-  const [messageBody, setMessageBody] = useState<string>("");
-  useEffect(() => {
-    if (fileUrl) {
-      setMessageBody(fileUrl);
-      setOpenViewAttachedMediaModal(true);
-    }
-  }, [fileUrl]);
+  const {
+    handleSendMessage,
+    messageBody,
+    setMessageBody,
+    ikUploadRef,
+    setOpenEmojiPicker,
+    uploadImgLoading,
+    openEmojiPicker,
+    openViewAttachedMediaModal,
+    handleDeleteImageKitFile,
+    handleCloseViewAttachedFilesModal,
+  } = useMessages();
+
   return (
     <>
       <Divider />
       <Grid item px={5} py={1} display="flex" alignItems="center" gap={2}>
         <TextField
-          value={messageBody}
+          value={messageBody?.body}
           placeholder="Send message"
           size="small"
           fullWidth
@@ -72,7 +63,16 @@ const SendMessageContainer = ({
           onChange={(
             event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
           ) => {
-            setMessageBody(event?.target?.value);
+            setMessageBody({ body: event?.target?.value });
+          }}
+          onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (
+              event.key === "Enter" &&
+              (messageBody?.body?.length > 0 || messageBody?.fileId)
+            ) {
+              event.stopPropagation();
+              handleSendMessage();
+            }
           }}
           InputProps={{
             startAdornment: (
@@ -103,19 +103,7 @@ const SendMessageContainer = ({
                 <IconButton
                   disabled={uploadImgLoading}
                   sx={{ color: theme.palette.success.light }}
-                  onClick={() => {
-                    sendMessage({
-                      conversationId: currentConversation?.id as string,
-                      messageBody,
-                      senderId: currentConversation?.members?.find(
-                        (member: Member) =>
-                          member?.userId === loggedInUser?.user?.id
-                      )?.id as string,
-                    }).then(() => {
-                      setFileUrl(null);
-                      return setMessageBody("");
-                    });
-                  }}
+                  onClick={handleSendMessage}
                 >
                   <OutboundIcon />
                 </IconButton>
@@ -133,52 +121,23 @@ const SendMessageContainer = ({
             <EmojiPicker
               data={data}
               onEmojiSelect={(emojiData: EmojiData) => {
-                setMessageBody((prev) => `${prev} ${emojiData?.native}`);
+                setMessageBody((prev) => ({
+                  ...prev,
+                  body: `${prev} ${emojiData?.native}`,
+                }));
               }}
             />
           </Popover>
         )}
       </Grid>
       {openViewAttachedMediaModal && (
-        <Dialog
+        <ViewAttachedFileModal
           open={openViewAttachedMediaModal}
-          onClose={() => setOpenViewAttachedMediaModal(false)}
-        >
-          <DialogContent>
-            <ViewAttachedMedia src={messageBody} />
-          </DialogContent>
-          <DialogActions>
-            <CustomButton
-              variant="outlined"
-              onClick={() => {
-                setMessageBody("");
-                setFileUrl(null);
-                setOpenViewAttachedMediaModal(false);
-              }}
-            >
-              Cancel
-            </CustomButton>
-            <CustomButton
-              variant="contained"
-              onClick={() => {
-                sendMessage({
-                  conversationId: currentConversation?.id as string,
-                  messageBody,
-                  senderId: currentConversation?.members?.find(
-                    (member: Member) =>
-                      member?.userId === loggedInUser?.user?.id
-                  )?.id as string,
-                }).then(() => {
-                  setFileUrl(null);
-                  setOpenViewAttachedMediaModal(false);
-                  setMessageBody("");
-                });
-              }}
-            >
-              Send
-            </CustomButton>
-          </DialogActions>
-        </Dialog>
+          onClose={handleCloseViewAttachedFilesModal}
+          messageBody={messageBody}
+          handleDeleteImageKitFile={handleDeleteImageKitFile}
+          handleSendMessage={handleSendMessage}
+        />
       )}
     </>
   );

@@ -47,6 +47,8 @@ export interface Message {
   createdAt: string;
   updatedAt: string;
   sender: Sender;
+  fileId?: string | null;
+  fileUrl?: string | null;
 }
 
 export interface Sender {
@@ -92,7 +94,6 @@ export interface CustomAppBarProps {
   currentLoggedInMember: Member | null;
 }
 export interface ConversationContainerProps {
-  currentConversation: Conversation | null;
   drawerWidth: number;
   currentLoggedInMember: Member | null;
   loggedInUser: LoggedInUser;
@@ -162,4 +163,9 @@ export interface EmojiData {
   keywords: string[];
   shortcodes: string;
   emoticons: string[];
+}
+export interface MessageBody {
+  fileId?: string | null;
+  fileUrl?: string | null;
+  body?: string | null;
 }

@@ -1,18 +1,17 @@
 import { Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { getConversation } from "@/api/conversations";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useConversationContext } from "@/contexts/ConversationContext";
 import ChatListDrawer from "../ChatListDrawer/ChatListDrawer";
 import ConversationContainer from "../ConversationContainer/ConversationContainer";
 import NoChatOpen from "../NoChatOpen/NoChatOpen";
+import useConversation from "@/hooks/useConversation";
 const drawerWidth = 320;
 export default function ResponsiveChatDrawer() {
   const { state } = useLocation();
   const { loggedInUser } = useAuthContext();
-  const [conversations, setConversations] = useState([]);
-
+  const { conversations, handleGetConversation } = useConversation()!;
   const {
     allMessages,
     setCurrentConversation,
@@ -22,8 +21,8 @@ export default function ResponsiveChatDrawer() {
   } = useConversationContext()!;
 
   useEffect(() => {
-    getConversation().then((res) => setConversations(res));
-  }, []);
+    handleGetConversation();
+  }, [handleGetConversation]);
 
   useEffect(() => {
     if (state && state?.type) {
@@ -48,7 +47,6 @@ export default function ResponsiveChatDrawer() {
           drawerWidth={drawerWidth}
           loggedInUser={loggedInUser}
           messagesEndRef={messagesEndRef}
-          currentConversation={currentConversation}
         />
       ) : (
         <NoChatOpen drawerWidth={drawerWidth} />

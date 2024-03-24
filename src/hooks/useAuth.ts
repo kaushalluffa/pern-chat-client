@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { userLogin, userSignup } from "@/api/authApiHandlers";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { VITE_SERVER_URL } from "@/utils/constants";
 import { SignupData } from "@/utils/types";
-import axios from "axios";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,10 @@ export default function useAuth() {
   const [cookies, _, removeCookie] = useCookies(["token"]);
   const [loading, setLoading] = useState<"login" | "signup" | null>(null);
   const { setLoggedInUser } = useAuthContext();
+  const [tabValue, setTabValue] = useState<number>(0);
+  function handleTabChange(event: React.SyntheticEvent, newValue: number) {
+    setTabValue(newValue);
+  }
   const [signupData, setSignupData] = useState<SignupData>({
     email: "",
     password: "",
@@ -51,16 +54,8 @@ export default function useAuth() {
 
   async function handleSignup() {
     setLoading("signup");
-    const response = await axios(`${VITE_SERVER_URL}/auth/signup`, {
-      method: "POST",
-      data: {
-        email: signupData?.email,
-        name: signupData?.fullName,
-        password: signupData?.password,
-      },
-      withCredentials: true,
-    });
 
+    const response = await userSignup(signupData);
     if (response && response?.data) {
       setLoggedInUser({ isAuthenticated: true, user: response?.data });
       navigate("/");
@@ -69,14 +64,7 @@ export default function useAuth() {
   }
   async function handleLogin() {
     setLoading("login");
-    const response = await axios(`${VITE_SERVER_URL}/auth/login`, {
-      method: "POST",
-      data: {
-        email: loginData?.email,
-        password: loginData?.password,
-      },
-      withCredentials: true,
-    });
+    const response = await userLogin(loginData);
     if (response && response?.data) {
       setLoggedInUser({ isAuthenticated: true, user: response?.data });
       navigate("/");
@@ -97,5 +85,8 @@ export default function useAuth() {
     loginData,
     loading,
     logout,
+    tabValue,
+    setTabValue,
+    handleTabChange,
   };
 }

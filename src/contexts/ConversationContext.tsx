@@ -14,8 +14,8 @@ import {
   Message,
 } from "@/utils/types";
 
-import { getMessages } from "@/api/messages";
 import { useAuthContext } from "./AuthContext";
+import { getMessages } from "@/api/messagesApiHandlers";
 
 const ConversationContext = createContext<ConversationContextType | null>(null);
 
@@ -67,10 +67,20 @@ export default function ConversationContextProvider({
           }
         });
       });
+      socket.on("deletedMessage", (deletedMessageId) => {
+        console.log(deletedMessageId, "a");
+        return setAllMessages((prev) => {
+          const filteredMessages = prev?.filter(
+            (message) => message?.id !== deletedMessageId
+          );
+          return filteredMessages ?? prev;
+        });
+      });
       return () => {
         socket.off("newMessage", () => {
           setAllMessages([]);
         });
+        socket.off("deletedMessage", () => {});
       };
     }
   }, [socket]);

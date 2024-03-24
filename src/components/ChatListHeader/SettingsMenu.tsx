@@ -8,10 +8,8 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { Contrast, Logout } from "@mui/icons-material";
-import SettingIcon from "@mui/icons-material/Settings";
 import useAuth from "@/hooks/useAuth";
 
 const SettingsMenu = ({
@@ -22,7 +20,6 @@ const SettingsMenu = ({
   setSettingsAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }) => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const { mode, handleSetTheme } = useThemeContext();
   const { logout } = useAuth();
 
@@ -49,22 +46,6 @@ const SettingsMenu = ({
               primaryTypographyProps={{ color: theme.palette.text.secondary }}
             >
               Switch to {mode === "light" ? "dark" : "light"} mode
-            </ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => {
-              navigate("/settings");
-            }}
-          >
-            <ListItemIcon>
-              <SettingIcon />
-            </ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{ color: theme.palette.text.secondary }}
-            >
-              Settings
             </ListItemText>
           </ListItemButton>
         </ListItem>

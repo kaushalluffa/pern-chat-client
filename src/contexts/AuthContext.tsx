@@ -16,6 +16,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     isAuthenticated: false,
     user: null,
   });
+  
   const [showLoading, setShowLoading] = useState<boolean>(true);
 
   useEffect(() => {

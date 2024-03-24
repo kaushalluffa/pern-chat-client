@@ -1,16 +1,19 @@
-import { createConversation } from "@/api/conversations";
-import { getAllUsers } from "@/api/users";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { User } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "./useDebounce";
 import { useModalsContext } from "@/contexts/ModalsContext";
-
+import { getAllUsers } from "@/api/usersApiHandlers";
+import {
+  createConversation,
+  getConversation,
+} from "@/api/conversationsApiHandlers";
 export default function useConversation() {
   const { loggedInUser } = useAuthContext();
   const { createConversationModal, setCreateConversationModal } =
     useModalsContext();
   const [searchUserValue, setSearchUserValue] = useState<string>("");
+  const [conversations, setConversations] = useState([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<User[]>(() =>
     loggedInUser?.isAuthenticated && loggedInUser?.user
@@ -30,15 +33,6 @@ export default function useConversation() {
       setAllUsers([]);
     }
   }, []);
-  const debouncedSearchUser = useDebounce(handleGetUsers, 500);
-  useEffect(() => {
-    if (searchUserValue) {
-      debouncedSearchUser(searchUserValue);
-    } else {
-      handleGetUsers();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchUserValue, handleGetUsers]);
   function handleClose() {
     setSelectedUsers(
       loggedInUser?.isAuthenticated && loggedInUser?.user
@@ -52,6 +46,20 @@ export default function useConversation() {
   ) {
     setSearchUserValue(event.target.value);
   }
+  const handleGetConversation = useCallback(async () => {
+    const response = await getConversation();
+    setConversations(response);
+  }, []);
+  const debouncedSearchUser = useDebounce(handleGetUsers, 500);
+  useEffect(() => {
+    if (searchUserValue) {
+      debouncedSearchUser(searchUserValue);
+    } else {
+      handleGetUsers();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchUserValue, handleGetUsers]);
+
   return {
     createConversationModal,
     handleSearchUserChange,
@@ -61,5 +69,8 @@ export default function useConversation() {
     searchUserValue,
     selectedUsers,
     setSelectedUsers,
+    conversations,
+    setConversations,
+    handleGetConversation,
   };
 }

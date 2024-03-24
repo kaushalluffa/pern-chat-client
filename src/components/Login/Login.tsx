@@ -14,13 +14,7 @@ import CustomButton from "../CustomButton/CustomButton";
 
 const Login = () => {
   const theme = useTheme();
-  const {
-    loginData,
-    handleLoginDataChange,
-    handleLogin,
-
-    loading,
-  } = useAuth();
+  const { loginData, handleLoginDataChange, handleLogin, loading } = useAuth();
 
   return (
     <Grid container justifyContent="center" alignItems="center">

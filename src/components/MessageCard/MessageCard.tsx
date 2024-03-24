@@ -15,6 +15,7 @@ import stringAvatar from "../../utils/stringAvatar";
 import { Delete } from "@mui/icons-material";
 import { checkIfMessageIsFileUrl } from "@/utils/helpers";
 import ViewAttachedMedia from "../ViewAttachedMedia/ViewAttachedMedia";
+import useMessages from "@/hooks/useMessages";
 
 const MessageCard = ({
   message,
@@ -23,9 +24,10 @@ const MessageCard = ({
   messagesEndRef,
 }: MessageCardProps) => {
   const theme = useTheme();
+  const { handleDeleteMessage } = useMessages();
   const [messageCardAnchorEl, setMessageCardAnchorEl] =
     useState<HTMLElement | null>(null);
-  const isFileUrl = checkIfMessageIsFileUrl(message?.body);
+  const isFileUrl = checkIfMessageIsFileUrl(message?.fileUrl as string);
   return (
     <>
       <Grid
@@ -82,25 +84,30 @@ const MessageCard = ({
                   >
                     <Grid item xs zeroMinWidth>
                       {isFileUrl ? (
-                        <ViewAttachedMedia src={message?.body} />
+                        <ViewAttachedMedia src={message?.fileUrl as string} />
                       ) : (
                         <Typography color={theme.palette.text.primary}>
                           {message?.body}
                         </Typography>
                       )}
                     </Grid>
-                    <Grid item alignSelf="flex-start">
-                      <IconButton
-                        sx={{ color: "#FFF" }}
-                        onClick={(
-                          event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-                        ) => {
-                          setMessageCardAnchorEl(event.currentTarget);
-                        }}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </Grid>
+                    {message?.sender?.userId === loggedInUser?.user?.id && (
+                      <Grid item alignSelf="flex-start">
+                        <IconButton
+                          sx={{ color: "#FFF" }}
+                          onClick={(
+                            event: React.MouseEvent<
+                              HTMLButtonElement,
+                              MouseEvent
+                            >
+                          ) => {
+                            setMessageCardAnchorEl(event.currentTarget);
+                          }}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
@@ -136,7 +143,7 @@ const MessageCard = ({
               alignItems="center"
               gap={1}
               onClick={() => {
-                setMessageCardAnchorEl(null);
+                handleDeleteMessage(message);
               }}
             >
               <IconButton disableRipple>

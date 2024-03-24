@@ -11,7 +11,6 @@ const ConversationContainer = ({
   drawerWidth,
   loggedInUser,
   messagesEndRef,
-  currentConversation,
 }: ConversationContainerProps) => {
   return (
     <Grid
@@ -31,10 +30,7 @@ const ConversationContainer = ({
         messagesEndRef={messagesEndRef}
         loggedInUser={loggedInUser}
       />
-      <SendMessageContainer
-        currentConversation={currentConversation}
-        loggedInUser={loggedInUser}
-      />
+      <SendMessageContainer />
     </Grid>
   );
 };

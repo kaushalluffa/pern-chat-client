@@ -1,9 +1,10 @@
 import { Grid, Paper, Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import Signup from "../Signup/Signup";
 import Login from "../Login/Login";
 import { useAuthContext } from "@/contexts/AuthContext";
 import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
+import useAuth from "@/hooks/useAuth";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -16,10 +17,7 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 const Auth = () => {
   const { showLoading } = useAuthContext();
-  const [value, setValue] = useState<number>(0);
-  function handleChange(event: React.SyntheticEvent, newValue: number) {
-    setValue(newValue);
-  }
+  const { tabValue, handleTabChange } = useAuth();
   if (showLoading) {
     return <FullScreenLoader />;
   }
@@ -32,14 +30,14 @@ const Auth = () => {
       alignItems="center"
     >
       <Grid item display="flex" flexDirection="column" gap={2} height="500px">
-        <Tabs value={value} onChange={handleChange} component={Paper}>
+        <Tabs value={tabValue} onChange={handleTabChange} component={Paper}>
           <Tab label="Sign In" />
           <Tab label="Sign Up" />
         </Tabs>
-        <CustomTabPanel value={value} index={0}>
+        <CustomTabPanel value={tabValue} index={0}>
           <Login />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
+        <CustomTabPanel value={tabValue} index={1}>
           <Signup />
         </CustomTabPanel>
       </Grid>

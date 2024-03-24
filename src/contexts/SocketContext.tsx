@@ -38,21 +38,9 @@ const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
     if (socket) {
       socket.on("connect", onConnect);
       socket.on("disconnect", onDisconnect);
-      // socket.on("newMessage", (data) => {
-      //   return setAllMessages((prev) => {
-      //     if (prev?.find((message: any) => message?.id === data?.id)) {
-      //       return prev;
-      //     } else {
-      //       return [...prev, data];
-      //     }
-      //   });
-      // });
       return () => {
         socket.off("connect", onConnect);
         socket.off("disconnect", onDisconnect);
-        //   socket.off("newMessage", () => {
-        //     setAllMessages([]);
-        //   });
       };
     }
   }, [socket]);
