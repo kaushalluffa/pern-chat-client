@@ -9,11 +9,13 @@ import React, {
 } from "react";
 import { useCookies } from "react-cookie";
 import { Socket, io } from "socket.io-client";
+import { useAuthContext } from "./AuthContext";
 
 const SocketContext = createContext<SocketContextType | null>(null);
 const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [cookies] = useCookies(["token"]);
+  const { loggedInUser } = useAuthContext()!;
   const memoizedCookies = useMemo(() => {
     return cookies;
   }, [cookies]);
@@ -27,6 +29,11 @@ const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [memoizedCookies]);
+  useMemo(() => {
+    if (loggedInUser?.isAuthenticated && loggedInUser?.user?.id && socket) {
+      return socket.emit("connectedUser", loggedInUser?.user?.id);
+    }
+  }, [loggedInUser, socket]);
   function onConnect() {
     console.log("connected to socket");
   }

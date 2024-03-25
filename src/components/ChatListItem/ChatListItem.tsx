@@ -24,11 +24,17 @@ const ChatListItem = ({
           (member: Member) => member?.userId !== loggedInUser?.user?.id
         )?.user?.name
       : conversation?.groupTitle;
+  const conversationImageUrl =
+    conversation?.type === "DIRECT_MESSAGE"
+      ? conversation?.members?.find(
+          (member: Member) => member?.userId !== loggedInUser?.user?.id
+        )?.user?.imageUrl
+      : "";
   return (
     <ListItem
       key={conversation?.id}
       disablePadding
-      sx={{ bgcolor: theme.palette.divider }}
+      sx={{ bgcolor: theme.palette.divider, mt: 1 }}
     >
       <ListItemButton
         onClick={() => {
@@ -49,8 +55,10 @@ const ChatListItem = ({
       >
         <ListItemIcon>
           <Avatar
-            src={""}
-            {...stringAvatar(conversationTitle as string)}
+            src={conversationImageUrl ?? ""}
+            {...(conversationTitle && !conversationImageUrl?.trim()?.length
+              ? stringAvatar(conversationTitle)
+              : {})}
             sx={{ color: theme.palette.text.primary }}
           />
         </ListItemIcon>

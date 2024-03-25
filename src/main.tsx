@@ -6,7 +6,6 @@ import { CssBaseline } from "@mui/material";
 import AuthContextProvider from "./contexts/AuthContext";
 import SocketContextProvider from "./contexts/SocketContext";
 import ConversationContextProvider from "./contexts/ConversationContext";
-import ModalsContextProvider from "./contexts/ModalsContext";
 import AllRoutes from "./components/RoutesCollection/AllRoutes";
 import ThemeContextProvider from "./contexts/ThemeContextProvider";
 import { IKContext } from "imagekitio-react";
@@ -35,9 +34,7 @@ root.render(
               <SocketContextProvider>
                 <ConversationContextProvider>
                   <CssBaseline />
-                  <ModalsContextProvider>
-                    <AllRoutes />
-                  </ModalsContextProvider>
+                  <AllRoutes />
                 </ConversationContextProvider>
               </SocketContextProvider>
             </AuthContextProvider>

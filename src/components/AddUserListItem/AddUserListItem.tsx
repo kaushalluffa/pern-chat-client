@@ -1,4 +1,4 @@
-import { AddUserListItemProps, User } from "@/utils/types";
+import { AddUserListItemProps, ConversationType, User } from "@/utils/types";
 import {
   Avatar,
   ListItem,
@@ -16,6 +16,7 @@ const AddUserListItem = ({
   setSelectedUsers,
   user,
   selectedUsers,
+  type,
 }: AddUserListItemProps) => {
   const theme = useTheme();
   return (
@@ -33,17 +34,22 @@ const AddUserListItem = ({
         selected={!!selectedUsers?.find((s) => s?.id === user?.id)}
         sx={{ borderRadius: 4 }}
         onClick={() => {
-          setSelectedUsers((prev: User[]) => {
-            const isUserExist = prev?.find(
-              (prevUser: User) => prevUser?.id === user?.id
-            );
-            if (isUserExist) {
-              return prev?.filter(
-                (prevUser: User) => user?.id !== prevUser?.id
+          if (type === ConversationType.DIRECT_MESSAGE) {
+            setSelectedUsers([user]);
+          }
+          if (type === ConversationType.GROUP) {
+            setSelectedUsers((prev: User[]) => {
+              const isUserExist = prev?.find(
+                (prevUser: User) => prevUser?.id === user?.id
               );
-            }
-            return [...prev, user];
-          });
+              if (isUserExist) {
+                return prev?.filter(
+                  (prevUser: User) => user?.id !== prevUser?.id
+                );
+              }
+              return [...prev, user];
+            });
+          }
         }}
       >
         <ListItemIcon>

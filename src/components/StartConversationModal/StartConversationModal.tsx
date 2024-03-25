@@ -1,4 +1,8 @@
-import { User } from "@/utils/types";
+import {
+  ConversationType,
+  StartConversationModalProps,
+  User,
+} from "@/utils/types";
 import {
   Dialog,
   DialogActions,
@@ -12,36 +16,45 @@ import React from "react";
 import AddUserListItem from "../AddUserListItem/AddUserListItem";
 import NoDataAvailable from "../NoDataAvailable/NoDataAvailable";
 import CustomButton from "../CustomButton/CustomButton";
-import useConversation from "@/hooks/useConversation";
 
-const StartConversationModal = () => {
+const StartConversationModal = ({
+  open,
+  type,
+  onClose,
+  handleSearchUserChange,
+  handleCreateConversation,
+  allUsers,
+  searchUserValue,
+  loggedInUser,
+  selectedUserForConversation,
+  setSelectedUserForConversation,
+  groupTitle,
+  setGroupTitle,
+}: StartConversationModalProps) => {
   const theme = useTheme();
-  const {
-    createConversationModal,
-    handleSearchUserChange,
-    handleClose,
-    handleCreateConversation,
-    allUsers,
-    searchUserValue,
-    selectedUsers,
-    setSelectedUsers,
-  } = useConversation();
+
   const renderUsers = (usersList: User[]) => {
     return usersList?.map((user: User) => (
       <AddUserListItem
         key={user?.id}
-        selectedUsers={selectedUsers}
-        setSelectedUsers={setSelectedUsers}
+        selectedUsers={selectedUserForConversation}
+        setSelectedUsers={setSelectedUserForConversation}
         user={user}
+        type={type}
       />
     ));
   };
+  function handleClose() {
+    setSelectedUserForConversation(
+      loggedInUser?.isAuthenticated && loggedInUser?.user
+        ? [loggedInUser?.user]
+        : []
+    );
+    setGroupTitle("");
+    onClose();
+  }
   return (
-    <Dialog
-      open={createConversationModal?.open}
-      onClose={handleClose}
-      maxWidth="lg"
-    >
+    <Dialog open={open} onClose={handleClose} maxWidth="lg">
       <DialogTitle color={theme.palette.text.secondary}>
         Select users to start a converstation
       </DialogTitle>
@@ -78,6 +91,40 @@ const StartConversationModal = () => {
             onChange={handleSearchUserChange}
             variant="outlined"
           />
+          {type === ConversationType.GROUP && (
+            <TextField
+              label="Group Title"
+              required={type === ConversationType.GROUP}
+              value={groupTitle}
+              size="small"
+              placeholder="Please enter a group title"
+              sx={{
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "transparent",
+                },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 4,
+                  color: theme.palette.text.secondary,
+                  bgcolor: theme.palette.action.hover,
+                  "& fieldset": {
+                    borderColor: "transparent",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "transparent",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "transparent",
+                  },
+                },
+              }}
+              onChange={(
+                event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
+                setGroupTitle(event.target.value);
+              }}
+              variant="outlined"
+            />
+          )}
           <Grid
             item
             display="flex"
@@ -105,6 +152,13 @@ const StartConversationModal = () => {
           Close
         </CustomButton>
         <CustomButton
+          disabled={
+            type === ConversationType.GROUP
+              ? !groupTitle ||
+                !groupTitle?.trim()?.length ||
+                !selectedUserForConversation?.length
+              : !selectedUserForConversation?.length
+          }
           variant="contained"
           sx={{ bgcolor: theme.palette.primary.main }}
           onClick={() => {

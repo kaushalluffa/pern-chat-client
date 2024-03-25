@@ -9,6 +9,7 @@ export const userSignup = async (signupData: SignupData) => {
       email: signupData?.email,
       name: signupData?.fullName,
       password: signupData?.password,
+      imageUrl: signupData?.imageUrl,
     },
     withCredentials: true,
   });

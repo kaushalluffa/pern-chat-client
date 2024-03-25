@@ -22,7 +22,9 @@ const Signup = () => {
   const { ikUploadRef, fileUrl, uploadImgLoading, setFileUrl } =
     useImageKitContext();
   useEffect(() => {
-    handleSignupDataChange({ key: "imageUrl", value: fileUrl ?? "" });
+    if (fileUrl) {
+      handleSignupDataChange({ key: "imageUrl", value: fileUrl ?? "" });
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileUrl]);

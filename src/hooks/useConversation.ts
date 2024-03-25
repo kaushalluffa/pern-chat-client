@@ -1,29 +1,53 @@
 import { useAuthContext } from "@/contexts/AuthContext";
-import { User } from "@/utils/types";
+import { Conversation, ConversationType, User } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "./useDebounce";
-import { useModalsContext } from "@/contexts/ModalsContext";
+
 import { getAllUsers } from "@/api/usersApiHandlers";
 import {
   createConversation,
   getConversation,
 } from "@/api/conversationsApiHandlers";
+import { useSocketContext } from "@/contexts/SocketContext";
 export default function useConversation() {
   const { loggedInUser } = useAuthContext();
-  const { createConversationModal, setCreateConversationModal } =
-    useModalsContext();
+  const [groupTitle, setGroupTitle] = useState<string>("");
   const [searchUserValue, setSearchUserValue] = useState<string>("");
-  const [conversations, setConversations] = useState([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<User[]>(() =>
-    loggedInUser?.isAuthenticated && loggedInUser?.user
-      ? [loggedInUser?.user]
-      : []
+  const { socket } = useSocketContext()!;
+  const [addChatAnchorEl, setAddChatAnchorEl] = useState<HTMLElement | null>(
+    null
   );
+  const [openCreateConversationModal, setOpenCreateConversationModal] =
+    useState<{ isOpen: boolean; type: ConversationType }>({
+      isOpen: false,
+      type: ConversationType.DIRECT_MESSAGE,
+    });
+  const [selectedUserForConversation, setSelectedUserForConversation] =
+    useState<User[]>(() =>
+      loggedInUser?.isAuthenticated && loggedInUser?.user
+        ? [loggedInUser?.user]
+        : []
+    );
   async function handleCreateConversation() {
     await createConversation({
-      members: selectedUsers,
+      members: [
+        ...selectedUserForConversation,
+        {
+          email: loggedInUser?.user?.email as string,
+          id: loggedInUser?.user?.id as string,
+          imageUrl: loggedInUser?.user?.imageUrl as string,
+          name: loggedInUser?.user?.name as string,
+        },
+      ],
+      type: openCreateConversationModal?.type,
+      ...(groupTitle ? { groupTitle, isGroup: !!groupTitle } : {}),
     });
+    setOpenCreateConversationModal({ isOpen: false, type: ConversationType.DIRECT_MESSAGE });
+    setAddChatAnchorEl(null);
+    setSelectedUserForConversation([]);
+    setGroupTitle("");
   }
   const handleGetUsers = useCallback(async (searchUserValue?: string) => {
     const users = await getAllUsers(searchUserValue);
@@ -33,14 +57,6 @@ export default function useConversation() {
       setAllUsers([]);
     }
   }, []);
-  function handleClose() {
-    setSelectedUsers(
-      loggedInUser?.isAuthenticated && loggedInUser?.user
-        ? [loggedInUser?.user]
-        : []
-    );
-    setCreateConversationModal({ open: false });
-  }
   function handleSearchUserChange(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -60,17 +76,44 @@ export default function useConversation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchUserValue, handleGetUsers]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("newConversation", (data) => {
+        return setConversations((prev) => {
+          return [data, ...prev];
+        });
+      });
+      //  socket.on("deletedMessage", (deletedMessageId) => {
+      //    console.log(deletedMessageId, "a");
+      //    return setAllMessages((prev) => {
+      //      const filteredMessages = prev?.filter(
+      //        (message) => message?.id !== deletedMessageId
+      //      );
+      //      return filteredMessages ?? prev;
+      //    });
+      //  });
+      return () => {
+        socket.off("newConversation", () => {});
+        // socket.off("deletedMessage", () => {});
+      };
+    }
+  }, [socket]);
   return {
-    createConversationModal,
     handleSearchUserChange,
-    handleClose,
     handleCreateConversation,
     allUsers,
     searchUserValue,
-    selectedUsers,
-    setSelectedUsers,
     conversations,
     setConversations,
     handleGetConversation,
+    loggedInUser,
+    selectedUserForConversation,
+    setSelectedUserForConversation,
+    groupTitle,
+    setGroupTitle,
+    addChatAnchorEl,
+    setAddChatAnchorEl,
+    openCreateConversationModal,
+    setOpenCreateConversationModal,
   };
 }
