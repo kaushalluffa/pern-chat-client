@@ -14,7 +14,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import stringAvatar from "../../utils/stringAvatar";
 import { Delete } from "@mui/icons-material";
 import { checkIfMessageIsFileUrl } from "@/utils/helpers";
-import ViewAttachedMedia from "../ViewAttachedMedia/ViewAttachedMedia";
+import ViewAttachedMedia from "../shared/ViewAttachedMedia";
 import useMessages from "@/hooks/useMessages";
 
 const MessageCard = ({

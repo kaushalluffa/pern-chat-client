@@ -6,7 +6,7 @@ import { CssBaseline } from "@mui/material";
 import AuthContextProvider from "./contexts/AuthContext";
 import SocketContextProvider from "./contexts/SocketContext";
 import ConversationContextProvider from "./contexts/ConversationContext";
-import AllRoutes from "./components/RoutesCollection/AllRoutes";
+import AllRoutes from "./components/shared/AllRoutes";
 import ThemeContextProvider from "./contexts/ThemeContextProvider";
 import { IKContext } from "imagekitio-react";
 import {

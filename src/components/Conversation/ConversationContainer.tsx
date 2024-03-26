@@ -1,9 +1,9 @@
 import { Grid, Toolbar } from "@mui/material";
 import React from "react";
-import CustomAppBar from "../CustomAppBar/CustomAppBar";
+import CustomAppBar from "../Custom/CustomAppBar";
 import { ConversationContainerProps } from "@/utils/types";
-import MessagesList from "../MessagesList/MessagesList";
-import SendMessageContainer from "../SendMessageContainer/SendMessageContainer";
+import MessagesList from "../Message/MessagesList";
+import SendMessageContainer from "../Message/SendMessageContainer";
 
 const ConversationContainer = ({
   allMessages,

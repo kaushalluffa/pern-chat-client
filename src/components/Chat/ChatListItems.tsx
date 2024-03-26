@@ -1,15 +1,17 @@
-import { Conversation, LoggedInUser } from "@/utils/types";
+import { Conversation, LoggedInUser, Message } from "@/utils/types";
 import React from "react";
-import ChatListItem from "../ChatListItem/ChatListItem";
+import ChatListItem from "./ChatListItem";
 
 const ChatListItems = ({
   conversations,
   loggedInUser,
   currentConversation,
+  newMessagesInConversations,
 }: {
   conversations: Conversation[];
   loggedInUser: LoggedInUser;
   currentConversation: Conversation | null;
+  newMessagesInConversations: Message[];
 }) => {
   return conversations?.map((conversation: Conversation) => {
     return (
@@ -18,6 +20,7 @@ const ChatListItems = ({
         conversation={conversation}
         currentConversation={currentConversation}
         loggedInUser={loggedInUser}
+        newMessagesInConversations={newMessagesInConversations}
       />
     );
   });

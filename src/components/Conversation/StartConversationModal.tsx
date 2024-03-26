@@ -1,8 +1,4 @@
-import {
-  ConversationType,
-  StartConversationModalProps,
-  User,
-} from "@/utils/types";
+import { StartConversationModalProps, User } from "@/utils/types";
 import {
   Dialog,
   DialogActions,
@@ -13,9 +9,9 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import AddUserListItem from "../AddUserListItem/AddUserListItem";
-import NoDataAvailable from "../NoDataAvailable/NoDataAvailable";
-import CustomButton from "../CustomButton/CustomButton";
+import AddUserListItem from "../shared/AddUserListItem";
+import NoDataAvailable from "../shared/NoDataAvailable";
+import CustomButton from "../Custom/CustomButton";
 
 const StartConversationModal = ({
   open,
@@ -91,10 +87,10 @@ const StartConversationModal = ({
             onChange={handleSearchUserChange}
             variant="outlined"
           />
-          {type === ConversationType.GROUP && (
+          {type === "GROUP" && (
             <TextField
               label="Group Title"
-              required={type === ConversationType.GROUP}
+              required={type === "GROUP"}
               value={groupTitle}
               size="small"
               placeholder="Please enter a group title"
@@ -153,7 +149,7 @@ const StartConversationModal = ({
         </CustomButton>
         <CustomButton
           disabled={
-            type === ConversationType.GROUP
+            type === "GROUP"
               ? !groupTitle ||
                 !groupTitle?.trim()?.length ||
                 !selectedUserForConversation?.length

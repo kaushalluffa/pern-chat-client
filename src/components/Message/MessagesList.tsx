@@ -1,7 +1,7 @@
 import { Message, MessagesListProps } from "@/utils/types";
 import { Grid } from "@mui/material";
 import React from "react";
-import MessageCard from "../MessageCard/MessageCard";
+import MessageCard from "./MessageCard";
 
 const MessagesList = ({
   allMessages,

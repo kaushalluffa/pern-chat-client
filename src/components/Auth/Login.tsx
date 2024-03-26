@@ -10,7 +10,7 @@ import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import useAuth from "@/hooks/useAuth";
-import CustomButton from "../CustomButton/CustomButton";
+import CustomButton from "../Custom/CustomButton";
 
 const Login = () => {
   const theme = useTheme();

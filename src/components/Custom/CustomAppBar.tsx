@@ -22,10 +22,26 @@ const CustomAppBar = ({
 }: CustomAppBarProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { setCurrentConversation } = useConversationContext()!;
+  const {
+    currentConversation,
+    setCurrentConversation,
+    numberOfOnlineUsersInCurrentConversation,
+  } = useConversationContext()!;
   const [chatMenuAnchorEl, setChatmenuAnchorEl] = useState<HTMLElement | null>(
     null
   );
+  const showOnlineGroup =
+    currentConversation?.isGroup &&
+    !!numberOfOnlineUsersInCurrentConversation &&
+    numberOfOnlineUsersInCurrentConversation - 1 >= 1
+      ? `${numberOfOnlineUsersInCurrentConversation - 1} Online`
+      : null;
+  const showOnlineChat =
+    !currentConversation?.isGroup &&
+    !!numberOfOnlineUsersInCurrentConversation &&
+    numberOfOnlineUsersInCurrentConversation - 1 === 1
+      ? "Online"
+      : null;
   return (
     <>
       <AppBar
@@ -44,12 +60,18 @@ const CustomAppBar = ({
                 <Typography color={theme.palette.text.secondary}>
                   {currentLoggedInMember?.user?.name}
                 </Typography>
-                <Typography
-                  color={theme.palette.text.secondary}
-                  variant="caption"
-                >
-                  Online
-                </Typography>
+                {(showOnlineChat || showOnlineGroup) && (
+                  <Typography
+                    color={theme.palette.text.secondary}
+                    variant="caption"
+                  >
+                    {showOnlineGroup
+                      ? showOnlineGroup
+                      : showOnlineChat
+                      ? showOnlineChat
+                      : null}
+                  </Typography>
+                )}
               </Grid>
             </Grid>
             <IconButton

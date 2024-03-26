@@ -1,9 +1,9 @@
 import { Grid, Paper, Tab, Tabs } from "@mui/material";
 import React from "react";
-import Signup from "../Signup/Signup";
-import Login from "../Login/Login";
+import Signup from "./Signup";
+import Login from "./Login";
 import { useAuthContext } from "@/contexts/AuthContext";
-import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
+import FullScreenLoader from "../shared/FullScreenLoader";
 import useAuth from "@/hooks/useAuth";
 interface TabPanelProps {
   children?: React.ReactNode;

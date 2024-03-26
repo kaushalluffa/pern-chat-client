@@ -3,21 +3,26 @@ import { useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useConversationContext } from "@/contexts/ConversationContext";
-import ChatListDrawer from "../ChatListDrawer/ChatListDrawer";
-import ConversationContainer from "../ConversationContainer/ConversationContainer";
-import NoChatOpen from "../NoChatOpen/NoChatOpen";
-import useConversation from "@/hooks/useConversation";
+import ChatListDrawer from "../Chat/ChatListDrawer";
+import ConversationContainer from "../Conversation/ConversationContainer";
+import NoChatOpen from "./NoChatOpen";
 const drawerWidth = 320;
 export default function ResponsiveChatDrawer() {
   const { state } = useLocation();
   const { loggedInUser } = useAuthContext();
-  const { conversations, handleGetConversation } = useConversation()!;
+  const {
+    conversations,
+    handleGetConversation,
+    newMessagesInConversations,
+    handleUpdateNewMessagesInConversation,
+  } = useConversationContext()!;
   const {
     allMessages,
     setCurrentConversation,
     currentConversation,
     messagesEndRef,
     currentLoggedInMember,
+    handleGoToHome,
   } = useConversationContext()!;
 
   useEffect(() => {
@@ -27,10 +32,11 @@ export default function ResponsiveChatDrawer() {
   useEffect(() => {
     if (state && state?.type) {
       setCurrentConversation && setCurrentConversation(state);
+      handleUpdateNewMessagesInConversation(state?.id);
     } else {
       setCurrentConversation && setCurrentConversation(null);
     }
-  }, [state, setCurrentConversation]);
+  }, [state, setCurrentConversation, handleUpdateNewMessagesInConversation]);
 
   return (
     <Grid container>
@@ -39,6 +45,8 @@ export default function ResponsiveChatDrawer() {
         currentConversation={currentConversation}
         loggedInUser={loggedInUser}
         drawerWidth={drawerWidth}
+        newMessagesInConversations={newMessagesInConversations}
+        handleGoToHome={handleGoToHome}
       />
       {currentConversation && currentConversation?.id ? (
         <ConversationContainer

@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -10,12 +11,21 @@ import { useSocketContext } from "./SocketContext";
 import {
   Conversation,
   ConversationContextType,
+  ConversationType,
   Member,
   Message,
+  User,
 } from "@/utils/types";
 
 import { useAuthContext } from "./AuthContext";
 import { getMessages } from "@/api/messagesApiHandlers";
+import { useNavigate } from "react-router-dom";
+import { useDebounce } from "@/hooks/useDebounce";
+import {
+  createConversation,
+  getConversation,
+} from "@/api/conversationsApiHandlers";
+import { getAllUsers } from "@/api/usersApiHandlers";
 
 const ConversationContext = createContext<ConversationContextType | null>(null);
 
@@ -27,12 +37,102 @@ export default function ConversationContextProvider({
   const { socket } = useSocketContext()!;
   const { loggedInUser } = useAuthContext()!;
   const [allMessages, setAllMessages] = useState<Message[]>([]);
+  const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
+  const [
+    numberOfOnlineUsersInCurrentConversation,
+    setNumberOfOnlineUsersInCurrentConversation,
+  ] = useState<number>(0);
+  const [newMessagesInConversations, setNewMessageInConversations] = useState<
+    Message[]
+  >([]);
   const [currentConversation, setCurrentConversation] =
     useState<Conversation | null>(null);
   const [currentLoggedInMember, setCurrentLoggedInMember] =
     useState<Member | null>(null);
+  const [groupTitle, setGroupTitle] = useState<string>("");
+  const [searchUserValue, setSearchUserValue] = useState<string>("");
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [addChatAnchorEl, setAddChatAnchorEl] = useState<HTMLElement | null>(
+    null
+  );
+
+  const [openCreateConversationModal, setOpenCreateConversationModal] =
+    useState<{ isOpen: boolean; type: ConversationType }>({
+      isOpen: false,
+      type: "DIRECT_MESSAGE",
+    });
+  const [selectedUserForConversation, setSelectedUserForConversation] =
+    useState<User[]>(() =>
+      loggedInUser?.isAuthenticated && loggedInUser?.user
+        ? [loggedInUser?.user]
+        : []
+    );
+  const handleUpdateNewMessagesInConversation = useCallback(
+    (conversationId: string) => {
+      setNewMessageInConversations((prev) =>
+        prev?.filter((message) => message?.conversationId !== conversationId)
+      );
+    },
+    []
+  );
+  function handleGoToHome() {
+    if (socket && currentConversation?.id) {
+      socket.emit("leaveConversation", currentConversation?.id);
+      navigate("/");
+      handleUpdateNewMessagesInConversation(currentConversation?.id);
+    }
+  }
+  async function handleCreateConversation() {
+    await createConversation({
+      members: [
+        ...selectedUserForConversation,
+        {
+          email: loggedInUser?.user?.email as string,
+          id: loggedInUser?.user?.id as string,
+          imageUrl: loggedInUser?.user?.imageUrl as string,
+          name: loggedInUser?.user?.name as string,
+        },
+      ],
+      type: openCreateConversationModal?.type,
+      ...(groupTitle ? { groupTitle, isGroup: !!groupTitle } : {}),
+    });
+    setOpenCreateConversationModal({
+      isOpen: false,
+      type: "DIRECT_MESSAGE",
+    });
+    setAddChatAnchorEl(null);
+    setSelectedUserForConversation([]);
+    setGroupTitle("");
+  }
+  const handleGetUsers = useCallback(async (searchUserValue?: string) => {
+    const users = await getAllUsers(searchUserValue);
+    if (users && Array.isArray(users) && users?.length > 0) {
+      setAllUsers(users);
+    } else {
+      setAllUsers([]);
+    }
+  }, []);
+  function handleSearchUserChange(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    setSearchUserValue(event.target.value);
+  }
+  const handleGetConversation = useCallback(async () => {
+    const response = await getConversation();
+    setConversations(response);
+  }, []);
+
+  const debouncedSearchUser = useDebounce(handleGetUsers, 500);
+  useEffect(() => {
+    if (searchUserValue) {
+      debouncedSearchUser(searchUserValue);
+    } else {
+      handleGetUsers();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchUserValue, handleGetUsers]);
   useEffect(() => {
     if (!messagesEndRef.current || !allMessages) return;
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -58,6 +158,9 @@ export default function ConversationContextProvider({
   }, [currentConversation, loggedInUser]);
   useEffect(() => {
     if (socket) {
+      socket.on("onlineUsersNumberForGroupChats", (data) => {
+        return setNumberOfOnlineUsersInCurrentConversation(data);
+      });
       socket.on("newMessage", (data) => {
         return setAllMessages((prev) => {
           if (prev?.find((message: Message) => message?.id === data?.id)) {
@@ -68,7 +171,6 @@ export default function ConversationContextProvider({
         });
       });
       socket.on("deletedMessage", (deletedMessageId) => {
-        console.log(deletedMessageId, "a");
         return setAllMessages((prev) => {
           const filteredMessages = prev?.filter(
             (message) => message?.id !== deletedMessageId
@@ -76,11 +178,29 @@ export default function ConversationContextProvider({
           return filteredMessages ?? prev;
         });
       });
+      socket.on("newConversation", (data) => {
+        return setConversations((prev) => {
+          return [data, ...prev];
+        });
+      });
+      socket.on("newMessageInConversation", (data) => {
+        return setNewMessageInConversations((prev) => {
+          const filterPrevMsgs = prev?.filter(
+            (message) => message?.conversationId !== data?.conversationId
+          );
+          return [...filterPrevMsgs, data];
+        });
+      });
       return () => {
         socket.off("newMessage", () => {
-          setAllMessages([]);
+          return setAllMessages([]);
         });
         socket.off("deletedMessage", () => {});
+        socket.off("onlineUsersNumberForGroupChats", () => {});
+        socket.off("newConversation", () => {});
+        socket.off("newMessageInConversation", () => {
+          setNewMessageInConversations([]);
+        });
       };
     }
   }, [socket]);
@@ -92,6 +212,29 @@ export default function ConversationContextProvider({
         messagesEndRef,
         currentConversation,
         currentLoggedInMember,
+        numberOfOnlineUsersInCurrentConversation,
+        setNumberOfOnlineUsersInCurrentConversation,
+        handleGoToHome,
+        newMessagesInConversations,
+        setNewMessageInConversations,
+        handleUpdateNewMessagesInConversation,
+        addChatAnchorEl,
+        allUsers,
+        conversations,
+        groupTitle,
+        openCreateConversationModal,
+        searchUserValue,
+        selectedUserForConversation,
+        setAddChatAnchorEl,
+        setAllUsers,
+        setConversations,
+        setGroupTitle,
+        setOpenCreateConversationModal,
+        setSearchUserValue,
+        setSelectedUserForConversation,
+        handleCreateConversation,
+        handleSearchUserChange,
+        handleGetConversation,
       }}
     >
       {children}
