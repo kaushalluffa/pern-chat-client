@@ -1,17 +1,24 @@
 name: Semantic release
 
 on:
-  push:
+  pull_request:
     branches:
     - main
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-    uses: actions/checkout@v4
-  - name: Semantic Release
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: Install dependencies
+      run: npm install
+    - name: Build app
+      run: npm run build
+    - name: Semantic Release
     uses: cycjimmy/semantic-release-action@v4
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
