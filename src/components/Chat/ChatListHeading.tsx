@@ -9,12 +9,13 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import StartConversationModal from "../StartConversationModal/StartConversationModal";
-import useConversation from "@/hooks/useConversation";
-import { ConversationType } from "@/utils/types";
+import StartConversationModal from "../Conversation/StartConversationModal";
+import { useConversationContext } from "@/contexts/ConversationContext";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 const ChatListHeading = () => {
   const theme = useTheme();
+  const { loggedInUser } = useAuthContext()!;
   const {
     addChatAnchorEl,
     setAddChatAnchorEl,
@@ -24,12 +25,11 @@ const ChatListHeading = () => {
     handleCreateConversation,
     allUsers,
     searchUserValue,
-    loggedInUser,
     selectedUserForConversation,
     setSelectedUserForConversation,
     groupTitle,
     setGroupTitle,
-  } = useConversation();
+  } = useConversationContext()!;
   return (
     <>
       <ListItem>
@@ -70,7 +70,7 @@ const ChatListHeading = () => {
               onClick={() => {
                 setOpenCreateConversationModal({
                   isOpen: true,
-                  type: ConversationType.DIRECT_MESSAGE,
+                  type: "DIRECT_MESSAGE",
                 });
               }}
             >
@@ -85,7 +85,7 @@ const ChatListHeading = () => {
               onClick={() => {
                 setOpenCreateConversationModal({
                   isOpen: true,
-                  type: ConversationType.GROUP,
+                  type: "GROUP",
                 });
               }}
             >
@@ -103,7 +103,7 @@ const ChatListHeading = () => {
           onClose={() => {
             setOpenCreateConversationModal({
               isOpen: false,
-              type: ConversationType.DIRECT_MESSAGE,
+              type: "DIRECT_MESSAGE",
             });
           }}
           type={openCreateConversationModal?.type}

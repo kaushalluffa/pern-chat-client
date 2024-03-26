@@ -1,9 +1,9 @@
 import App from "@/App";
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import Signup from "../Signup/Signup";
-import Login from "../Login/Login";
-import FullScreenLoader from "../FullScreenLoader/FullScreenLoader";
+import Signup from "../Auth/Signup";
+import Login from "../Auth/Login";
+import FullScreenLoader from "./FullScreenLoader";
 import Auth from "../Auth/Auth";
 
 const AllRoutes = () => {

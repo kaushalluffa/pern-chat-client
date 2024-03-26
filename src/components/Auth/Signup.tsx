@@ -11,7 +11,7 @@ import {
 import React, { useEffect } from "react";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import CustomButton from "../CustomButton/CustomButton";
+import CustomButton from "../Custom/CustomButton";
 import useAuth from "@/hooks/useAuth";
 import { useImageKitContext } from "@/contexts/ImageKitContext";
 

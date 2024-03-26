@@ -37,6 +37,41 @@ export interface ConversationContextType {
   setCurrentConversation: React.Dispatch<
     SetStateAction<Conversation | null>
   > | null;
+  numberOfOnlineUsersInCurrentConversation: number;
+  setNumberOfOnlineUsersInCurrentConversation: React.Dispatch<
+    SetStateAction<number>
+  >;
+  handleGoToHome: () => void;
+  newMessagesInConversations: Message[];
+  setNewMessageInConversations: React.Dispatch<SetStateAction<Message[]>>;
+  handleUpdateNewMessagesInConversation: (conversationId: string) => void;
+  groupTitle: string;
+  setGroupTitle: React.Dispatch<React.SetStateAction<string>>;
+  searchUserValue: string;
+  setSearchUserValue: React.Dispatch<React.SetStateAction<string>>;
+  conversations: Conversation[];
+  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
+  allUsers: User[];
+  setAllUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  addChatAnchorEl: HTMLElement | null;
+  setAddChatAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+  openCreateConversationModal: {
+    isOpen: boolean;
+    type: ConversationType;
+  };
+  setOpenCreateConversationModal: React.Dispatch<
+    React.SetStateAction<{
+      isOpen: boolean;
+      type: ConversationType;
+    }>
+  >;
+  selectedUserForConversation: User[];
+  setSelectedUserForConversation: React.Dispatch<React.SetStateAction<User[]>>;
+  handleCreateConversation: () => Promise<void>;
+  handleSearchUserChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  handleGetConversation: () => Promise<void>;
 }
 
 export interface Message {
@@ -85,9 +120,11 @@ export interface StartConversationModalProps {
 }
 export interface ChatListDrawerProps {
   conversations: Conversation[];
+  newMessagesInConversations: Message[];
   loggedInUser: LoggedInUser;
   currentConversation: Conversation | null;
   drawerWidth: number;
+  handleGoToHome: () => void;
 }
 export interface CustomAppBarProps {
   drawerWidth: number;
@@ -119,6 +156,7 @@ export interface ChatListItemProps {
   conversation: Conversation;
   loggedInUser: LoggedInUser;
   currentConversation: Conversation | null;
+  newMessagesInConversations: Message[];
 }
 export interface SearchChatListItemProps {}
 
@@ -170,10 +208,7 @@ export interface MessageBody {
   fileUrl?: string | null;
   body?: string | null;
 }
-export enum ConversationType {
-  DIRECT_MESSAGE,
-  GROUP,
-}
+export type ConversationType = "DIRECT_MESSAGE" | "GROUP";
 export interface StartConversationModalProps {
   open: boolean;
   type: ConversationType;

@@ -1,4 +1,4 @@
-import { AddUserListItemProps, ConversationType, User } from "@/utils/types";
+import { AddUserListItemProps, User } from "@/utils/types";
 import {
   Avatar,
   ListItem,
@@ -34,10 +34,10 @@ const AddUserListItem = ({
         selected={!!selectedUsers?.find((s) => s?.id === user?.id)}
         sx={{ borderRadius: 4 }}
         onClick={() => {
-          if (type === ConversationType.DIRECT_MESSAGE) {
+          if (type === "DIRECT_MESSAGE") {
             setSelectedUsers([user]);
           }
-          if (type === ConversationType.GROUP) {
+          if (type === "GROUP") {
             setSelectedUsers((prev: User[]) => {
               const isUserExist = prev?.find(
                 (prevUser: User) => prevUser?.id === user?.id

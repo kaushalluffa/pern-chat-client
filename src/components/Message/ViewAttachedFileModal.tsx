@@ -1,7 +1,7 @@
 import { Dialog, DialogActions, DialogContent } from "@mui/material";
 import React from "react";
-import ViewAttachedMedia from "../ViewAttachedMedia/ViewAttachedMedia";
-import CustomButton from "../CustomButton/CustomButton";
+import ViewAttachedMedia from "../shared/ViewAttachedMedia";
+import CustomButton from "../Custom/CustomButton";
 import { MessageBody } from "@/utils/types";
 
 const ViewAttachedFileModal = ({

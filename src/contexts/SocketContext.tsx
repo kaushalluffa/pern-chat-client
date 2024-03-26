@@ -29,28 +29,26 @@ const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [memoizedCookies]);
-  useMemo(() => {
-    if (loggedInUser?.isAuthenticated && loggedInUser?.user?.id && socket) {
-      return socket.emit("connectedUser", loggedInUser?.user?.id);
-    }
-  }, [loggedInUser, socket]);
-  function onConnect() {
-    console.log("connected to socket");
-  }
 
-  function onDisconnect() {
-    console.log("disconnected socket");
-  }
   useEffect(() => {
-    if (socket) {
-      socket.on("connect", onConnect);
-      socket.on("disconnect", onDisconnect);
+    if (
+      socket &&
+      loggedInUser &&
+      loggedInUser?.isAuthenticated &&
+      loggedInUser?.user
+    ) {
+      socket.on("connect", () => {
+        return socket.emit("connectedUser", loggedInUser?.user?.id);
+      });
+      socket.on("disconnect", () => {
+        return socket.emit("disconnectedUser", loggedInUser?.user?.id);
+      });
       return () => {
-        socket.off("connect", onConnect);
-        socket.off("disconnect", onDisconnect);
+        socket.off("connect", () => {});
+        socket.off("disconnect", () => {});
       };
     }
-  }, [socket]);
+  }, [socket, loggedInUser]);
   return (
     <SocketContext.Provider value={{ socket }}>
       {children}
