@@ -72,6 +72,12 @@ export interface ConversationContextType {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   handleGetConversation: () => Promise<void>;
+  handleDeleteConversation: () => Promise<void>;
+  chatMenuAnchorEl: HTMLElement | null;
+  setChatMenuAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+  searchConversationValue: string;
+  setSearchConversationValue: React.Dispatch<React.SetStateAction<string>>;
+  debouncedSearchChat: () => Promise<void>;
 }
 
 export interface Message {

@@ -9,7 +9,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { CustomAppBarProps } from "@/utils/types";
 import { Close, Delete } from "@mui/icons-material";
@@ -26,10 +26,11 @@ const CustomAppBar = ({
     currentConversation,
     setCurrentConversation,
     numberOfOnlineUsersInCurrentConversation,
+    chatMenuAnchorEl,
+    setChatMenuAnchorEl,
+    handleDeleteConversation,
   } = useConversationContext()!;
-  const [chatMenuAnchorEl, setChatmenuAnchorEl] = useState<HTMLElement | null>(
-    null
-  );
+
   const showOnlineGroup =
     currentConversation?.isGroup &&
     !!numberOfOnlineUsersInCurrentConversation &&
@@ -79,7 +80,7 @@ const CustomAppBar = ({
               onClick={(
                 event: React.MouseEvent<HTMLButtonElement, MouseEvent>
               ) => {
-                setChatmenuAnchorEl(event.currentTarget);
+                setChatMenuAnchorEl(event.currentTarget);
               }}
             >
               <MoreVertIcon />
@@ -92,7 +93,7 @@ const CustomAppBar = ({
           open={Boolean(chatMenuAnchorEl)}
           anchorEl={chatMenuAnchorEl}
           onClose={() => {
-            setChatmenuAnchorEl(null);
+            setChatMenuAnchorEl(null);
           }}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
@@ -113,7 +114,7 @@ const CustomAppBar = ({
           </MenuItem>
           <MenuItem
             onClick={() => {
-              setChatmenuAnchorEl(null);
+              handleDeleteConversation();
             }}
           >
             <Grid item display="flex" alignItems="center" gap={1}>

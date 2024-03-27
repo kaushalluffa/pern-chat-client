@@ -52,7 +52,7 @@ const StartConversationModal = ({
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="lg">
       <DialogTitle color={theme.palette.text.secondary}>
-        Select users to start a converstation
+        Select users to start a conversation
       </DialogTitle>
       <DialogContent>
         <Grid
