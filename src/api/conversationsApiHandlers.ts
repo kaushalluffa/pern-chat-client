@@ -19,11 +19,24 @@ export const createConversation = async (data: {
 
   return response?.data;
 };
-export const getConversation = async () => {
+export const getConversation = async (searchValue?: string) => {
   const response = await axios(`${VITE_SERVER_URL as string}/conversation`, {
-    method: "GET",
+    method: "POST",
+    data: { searchValue },
     withCredentials: true,
   });
+
+  return response?.data;
+};
+export const deleteConversation = async (conversationId: string) => {
+  const response = await axios(
+    `${VITE_SERVER_URL as string}/conversation/delete`,
+    {
+      method: "DELETE",
+      data: { conversationId },
+      withCredentials: true,
+    }
+  );
 
   return response?.data;
 };

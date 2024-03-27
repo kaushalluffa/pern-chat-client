@@ -77,7 +77,11 @@ const ChatListHeading = () => {
               <ListItemIcon>
                 <Add />
               </ListItemIcon>
-              <ListItemText>New Chat</ListItemText>
+              <ListItemText
+                primaryTypographyProps={{ color: theme.palette.text.secondary }}
+              >
+                New Chat
+              </ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -92,7 +96,11 @@ const ChatListHeading = () => {
               <ListItemIcon>
                 <GroupAdd />
               </ListItemIcon>
-              <ListItemText>New Group</ListItemText>
+              <ListItemText
+                primaryTypographyProps={{ color: theme.palette.text.secondary }}
+              >
+                New Group
+              </ListItemText>
             </ListItemButton>
           </ListItem>
         </Popover>

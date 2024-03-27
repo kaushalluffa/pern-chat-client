@@ -9,12 +9,13 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { CustomAppBarProps } from "@/utils/types";
+import { CustomAppBarProps, Member } from "@/utils/types";
 import { Close, Delete } from "@mui/icons-material";
 import { useConversationContext } from "@/contexts/ConversationContext";
 import { useNavigate } from "react-router-dom";
+import stringAvatar from "@/utils/stringAvatar";
 
 const CustomAppBar = ({
   drawerWidth,
@@ -26,10 +27,11 @@ const CustomAppBar = ({
     currentConversation,
     setCurrentConversation,
     numberOfOnlineUsersInCurrentConversation,
+    chatMenuAnchorEl,
+    setChatMenuAnchorEl,
+    handleDeleteConversation,
   } = useConversationContext()!;
-  const [chatMenuAnchorEl, setChatmenuAnchorEl] = useState<HTMLElement | null>(
-    null
-  );
+
   const showOnlineGroup =
     currentConversation?.isGroup &&
     !!numberOfOnlineUsersInCurrentConversation &&
@@ -42,6 +44,18 @@ const CustomAppBar = ({
     numberOfOnlineUsersInCurrentConversation - 1 === 1
       ? "Online"
       : null;
+  const conversationTitle =
+    currentConversation?.type === "DIRECT_MESSAGE"
+      ? currentConversation?.members?.find(
+          (member: Member) => member?.userId !== currentLoggedInMember?.user?.id
+        )?.user?.name
+      : currentConversation?.groupTitle;
+  const conversationImageUrl =
+    currentConversation?.type === "DIRECT_MESSAGE"
+      ? currentConversation?.members?.find(
+          (member: Member) => member?.userId !== currentLoggedInMember?.user?.id
+        )?.user?.imageUrl
+      : "";
   return (
     <>
       <AppBar
@@ -55,10 +69,16 @@ const CustomAppBar = ({
         <Toolbar>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item display="flex" gap={1} alignItems="center">
-              <Avatar sx={{ color: theme.palette.text.primary }} src={""} />
+              <Avatar
+                {...(conversationTitle && !conversationImageUrl?.trim()?.length
+                  ? stringAvatar(conversationTitle)
+                  : {})}
+                sx={{ color: theme.palette.text.primary }}
+                src={conversationImageUrl ?? ""}
+              />
               <Grid item>
                 <Typography color={theme.palette.text.secondary}>
-                  {currentLoggedInMember?.user?.name}
+                  {conversationTitle}
                 </Typography>
                 {(showOnlineChat || showOnlineGroup) && (
                   <Typography
@@ -79,7 +99,7 @@ const CustomAppBar = ({
               onClick={(
                 event: React.MouseEvent<HTMLButtonElement, MouseEvent>
               ) => {
-                setChatmenuAnchorEl(event.currentTarget);
+                setChatMenuAnchorEl(event.currentTarget);
               }}
             >
               <MoreVertIcon />
@@ -92,7 +112,7 @@ const CustomAppBar = ({
           open={Boolean(chatMenuAnchorEl)}
           anchorEl={chatMenuAnchorEl}
           onClose={() => {
-            setChatmenuAnchorEl(null);
+            setChatMenuAnchorEl(null);
           }}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
@@ -113,7 +133,7 @@ const CustomAppBar = ({
           </MenuItem>
           <MenuItem
             onClick={() => {
-              setChatmenuAnchorEl(null);
+              handleDeleteConversation();
             }}
           >
             <Grid item display="flex" alignItems="center" gap={1}>

@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
   createConversation,
+  deleteConversation,
   getConversation,
 } from "@/api/conversationsApiHandlers";
 import { getAllUsers } from "@/api/usersApiHandlers";
@@ -57,7 +58,8 @@ export default function ConversationContextProvider({
   const [addChatAnchorEl, setAddChatAnchorEl] = useState<HTMLElement | null>(
     null
   );
-
+  const [searchConversationValue, setSearchConversationValue] =
+    useState<string>("");
   const [openCreateConversationModal, setOpenCreateConversationModal] =
     useState<{ isOpen: boolean; type: ConversationType }>({
       isOpen: false,
@@ -69,6 +71,9 @@ export default function ConversationContextProvider({
         ? [loggedInUser?.user]
         : []
     );
+  const [chatMenuAnchorEl, setChatMenuAnchorEl] = useState<HTMLElement | null>(
+    null
+  );
   const handleUpdateNewMessagesInConversation = useCallback(
     (conversationId: string) => {
       setNewMessageInConversations((prev) =>
@@ -119,20 +124,41 @@ export default function ConversationContextProvider({
   ) {
     setSearchUserValue(event.target.value);
   }
-  const handleGetConversation = useCallback(async () => {
-    const response = await getConversation();
-    setConversations(response);
-  }, []);
-
-  const debouncedSearchUser = useDebounce(handleGetUsers, 500);
+  const handleGetConversation = useCallback(
+    async (searchConversationValue?: string) => {
+      const response = await getConversation(searchConversationValue);
+      setConversations(response);
+    },
+    []
+  );
+  const debouncedSearchChat = useDebounce(handleGetConversation, 500);
   useEffect(() => {
-    if (searchUserValue) {
-      debouncedSearchUser(searchUserValue);
+    if (searchConversationValue) {
+      debouncedSearchChat(searchConversationValue);
     } else {
-      handleGetUsers();
+      handleGetConversation();
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchConversationValue, handleGetConversation]);
+  const debouncedSearchUser = useDebounce(handleGetUsers, 500);
+  async function handleDeleteConversation() {
+    const response = await deleteConversation(
+      currentConversation?.id as string
+    );
+    if (response) {
+      setChatMenuAnchorEl(null);
+      handleGoToHome();
+    }
+  }
+  useEffect(() => {
+    if (openCreateConversationModal?.isOpen) {
+      if (searchUserValue) {
+        debouncedSearchUser(searchUserValue);
+      } else {
+        handleGetUsers();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchUserValue, handleGetUsers]);
+  }, [openCreateConversationModal, searchUserValue, handleGetUsers]);
   useEffect(() => {
     if (!messagesEndRef.current || !allMessages) return;
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -181,6 +207,14 @@ export default function ConversationContextProvider({
       socket.on("newConversation", (data) => {
         return setConversations((prev) => {
           return [data, ...prev];
+        });
+      });
+      socket.on("deleteConversation", (deletedConversationId) => {
+        return setConversations((prev) => {
+          const filteredConversations = prev?.filter(
+            (conversation) => conversation?.id !== deletedConversationId
+          );
+          return [...filteredConversations];
         });
       });
       socket.on("newMessageInConversation", (data) => {
@@ -235,6 +269,12 @@ export default function ConversationContextProvider({
         handleCreateConversation,
         handleSearchUserChange,
         handleGetConversation,
+        chatMenuAnchorEl,
+        setChatMenuAnchorEl,
+        handleDeleteConversation,
+        searchConversationValue,
+        setSearchConversationValue,
+        debouncedSearchChat,
       }}
     >
       {children}

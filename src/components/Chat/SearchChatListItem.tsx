@@ -1,9 +1,12 @@
+import { useConversationContext } from "@/contexts/ConversationContext";
 import { Search } from "@mui/icons-material";
 import { IconButton, ListItem, TextField, useTheme } from "@mui/material";
 import React from "react";
 
 const SearchChatListItem = () => {
   const theme = useTheme();
+  const { searchConversationValue, setSearchConversationValue } =
+    useConversationContext()!;
   return (
     <ListItem>
       <TextField
@@ -11,6 +14,12 @@ const SearchChatListItem = () => {
         size="small"
         fullWidth
         variant="outlined"
+        value={searchConversationValue}
+        onChange={(
+          event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          setSearchConversationValue(event.target.value);
+        }}
         sx={{
           "& .MuiInput-underline:after": {
             borderBottomColor: theme.palette.divider,
