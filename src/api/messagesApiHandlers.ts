@@ -6,7 +6,7 @@ export const getMessages = async (conversationId: string) => {
   const response = await axios(`${VITE_SERVER_URL}/message`, {
     withCredentials: true,
     method: "POST",
-    data: conversationId,
+    data: { conversationId },
   });
   return response?.data ?? [];
 };

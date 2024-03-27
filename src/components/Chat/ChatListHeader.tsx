@@ -1,4 +1,11 @@
-import { Grid, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
+import {
+  Grid,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { useState } from "react";
 import SettingIcon from "@mui/icons-material/Settings";
 import { Home } from "@mui/icons-material";
@@ -14,9 +21,16 @@ const ChatListHeader = ({ handleGoToHome }: { handleGoToHome: () => void }) => {
   return (
     <Toolbar>
       <Grid container justifyContent="space-between" alignItems="center">
-        <Typography variant="h5" color={theme.palette.text.secondary}>
-          Hi, {loggedInUser?.user?.name ?? ""}
-        </Typography>
+        <Tooltip title={loggedInUser?.user?.name} placement="bottom" arrow>
+          <Typography
+            variant="h5"
+            color={theme.palette.text.secondary}
+            maxWidth="65%"
+            noWrap
+          >
+            {loggedInUser?.user?.name ?? ""}
+          </Typography>
+        </Tooltip>
         <Grid item display="flex" alignItems="center" gap={1}>
           <IconButton
             disableRipple
