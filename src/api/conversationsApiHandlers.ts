@@ -1,6 +1,6 @@
-import { VITE_SERVER_URL } from "@/utils/constants";
+import { SERVER_ENDPOINTS } from "@/utils/constants";
 import { ConversationType, CreateConversationData } from "@/utils/types";
-import axios from "axios";
+import authFetchHandler from "./authFetchHandler";
 
 export const createConversation = async (data: {
   members: CreateConversationData[];
@@ -8,35 +8,26 @@ export const createConversation = async (data: {
   groupTitle?: string;
   isGroup?: boolean;
 }) => {
-  const response = await axios(
-    `${VITE_SERVER_URL as string}/conversation/create`,
-    {
-      method: "POST",
-      data,
-      withCredentials: true,
-    }
-  );
-
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.CONVERSATION.CREATE,
+    method: "POST",
+    data,
+  });
   return response?.data;
 };
 export const getConversation = async (searchValue?: string) => {
-  const response = await axios(`${VITE_SERVER_URL as string}/conversation`, {
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.CONVERSATION.GET,
     method: "POST",
     data: { searchValue },
-    withCredentials: true,
   });
-
   return response?.data;
 };
 export const deleteConversation = async (conversationId: string) => {
-  const response = await axios(
-    `${VITE_SERVER_URL as string}/conversation/delete`,
-    {
-      method: "DELETE",
-      data: { conversationId },
-      withCredentials: true,
-    }
-  );
-
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.CONVERSATION.DELETE,
+    method: "DELETE",
+    data: { conversationId },
+  });
   return response?.data;
 };

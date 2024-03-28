@@ -1,9 +1,11 @@
-import { VITE_SERVER_URL } from "@/utils/constants";
-import axios from "axios";
+import { SERVER_ENDPOINTS } from "@/utils/constants";
+
+import authFetchHandler from "./authFetchHandler";
 export const deleteImageKitFile = async (fileId: string) => {
-  const response = await axios(`${VITE_SERVER_URL}/img-kit/delete`, {
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.IMG_KIT.DELETE,
     method: "DELETE",
     data: { fileId },
   });
-  return response.data;
+  return response?.data;
 };
