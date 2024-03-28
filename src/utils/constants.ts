@@ -5,8 +5,6 @@ export const VITE_IMAGE_KIT_URL_ENDPOINT = import.meta.env
   .VITE_IMAGE_KIT_URL_ENDPOINT;
 export const VITE_IMAGE_KIT_PUBLIC_KEY = import.meta.env
   .VITE_IMAGE_KIT_PUBLIC_KEY;
-export const VITE_IMAGE_KIT_PRIVATE_KEY = import.meta.env
-  .VITE_IMAGE_KIT_PRIVATE_KEY;
 export const SERVER_ENDPOINTS = {
   AUTH: {
     LOGIN: "auth/login",
