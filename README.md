@@ -33,7 +33,11 @@ npm install
 
 [Server Setup Guide](https://github.com/kaushalluffa/pern-chat-server)
 
-## 4. **Run frontend:**
+## 4. **Add env file:**
+
+See .env.example file and add your keys accordingly
+
+## 5. **Run frontend:**
 
 ```bash
 npm run dev
