@@ -1,10 +1,10 @@
-import { VITE_SERVER_URL } from "@/utils/constants";
+import { SERVER_ENDPOINTS } from "@/utils/constants";
 import { Message } from "@/utils/types";
-import axios from "axios";
+import authFetchHandler from "./authFetchHandler";
 
 export const getMessages = async (conversationId: string) => {
-  const response = await axios(`${VITE_SERVER_URL}/message`, {
-    withCredentials: true,
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.MESSAGE.GET,
     method: "POST",
     data: { conversationId },
   });
@@ -23,16 +23,16 @@ export const sendMessage = async ({
   };
   senderId: string;
 }) => {
-  const response = await axios(`${VITE_SERVER_URL}/message/create`, {
-    withCredentials: true,
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.MESSAGE.CREATE,
     method: "POST",
     data: { conversationId, senderId, messageBody },
   });
   return response?.data ?? [];
 };
 export const deleteMessage = async ({ message }: { message: Message }) => {
-  const response = await axios(`${VITE_SERVER_URL}/message/delete`, {
-    withCredentials: true,
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.MESSAGE.DELETE,
     method: "DELETE",
     data: { message },
   });

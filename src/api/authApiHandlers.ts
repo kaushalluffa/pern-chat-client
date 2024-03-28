@@ -1,9 +1,10 @@
-import { VITE_SERVER_URL } from "@/utils/constants";
+import { SERVER_ENDPOINTS } from "@/utils/constants";
 import { SignupData } from "@/utils/types";
-import axios from "axios";
+import authFetchHandler from "./authFetchHandler";
 
 export const userSignup = async (signupData: SignupData) => {
-  const response = await axios(`${VITE_SERVER_URL}/auth/signup`, {
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.AUTH.SIGNUP,
     method: "POST",
     data: {
       email: signupData?.email,
@@ -11,7 +12,6 @@ export const userSignup = async (signupData: SignupData) => {
       password: signupData?.password,
       imageUrl: signupData?.imageUrl,
     },
-    withCredentials: true,
   });
   return response;
 };
@@ -20,13 +20,10 @@ export const userLogin = async (loginData: {
   password: string;
   showP: boolean;
 }) => {
-  const response = await axios(`${VITE_SERVER_URL}/auth/login`, {
+  const response = await authFetchHandler({
+    endPoint: SERVER_ENDPOINTS.AUTH.LOGIN,
     method: "POST",
-    data: {
-      email: loginData?.email,
-      password: loginData?.password,
-    },
-    withCredentials: true,
+    data: loginData,
   });
   return response;
 };
