@@ -10,9 +10,12 @@ import React, {
 import { useCookies } from "react-cookie";
 import { Socket, io } from "socket.io-client";
 import { useAuthContext } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SocketContext = createContext<SocketContextType | null>(null);
 const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [cookies] = useCookies(["token"]);
   const { loggedInUser } = useAuthContext()!;
@@ -21,14 +24,29 @@ const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [cookies]);
   useEffect(() => {
     if (memoizedCookies?.token) {
-      const socketInstance = io(VITE_SERVER_URL, {
-        auth: { token: memoizedCookies?.token },
-      });
-      if (socketInstance) {
-        setSocket(socketInstance);
+      try {
+        const socketInstance = io(VITE_SERVER_URL, {
+          auth: { token: memoizedCookies?.token },
+        });
+        if (socketInstance) {
+          setSocket(socketInstance);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          error?.toString() ?? "Error establishing websocket connection",
+          {
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          }
+        );
+        navigate("/auth");
       }
     }
-  }, [memoizedCookies]);
+  }, [memoizedCookies, navigate]);
 
   useEffect(() => {
     if (

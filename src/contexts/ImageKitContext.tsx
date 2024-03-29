@@ -1,6 +1,7 @@
 import { CircularProgress, Dialog, DialogContent } from "@mui/material";
 import { IKUpload } from "imagekitio-react";
 import React, { createContext, useContext, useRef, useState } from "react";
+import toast from "react-hot-toast";
 export const ImageKitContext = createContext<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ikUploadRef: any | null;
@@ -55,6 +56,16 @@ const ImageKitContextProvider = ({
         }}
         onError={(error) => {
           console.log(error);
+          toast.error(
+            error?.toString() ?? "Failed to upload the media. Please try again",
+            {
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            }
+          );
           setUploadImgLoading(false);
         }}
       />
