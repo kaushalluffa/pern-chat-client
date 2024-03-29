@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -8,6 +8,7 @@ import ConversationContainer from "../Conversation/ConversationContainer";
 import NoChatOpen from "./NoChatOpen";
 const drawerWidth = 320;
 export default function ResponsiveChatDrawer() {
+  const isMobile = useMediaQuery("(max-width: 320px)");
   const { state } = useLocation();
   const { loggedInUser } = useAuthContext();
   const {
@@ -40,14 +41,16 @@ export default function ResponsiveChatDrawer() {
 
   return (
     <Grid container>
-      <ChatListDrawer
-        conversations={conversations}
-        currentConversation={currentConversation}
-        loggedInUser={loggedInUser}
-        drawerWidth={drawerWidth}
-        newMessagesInConversations={newMessagesInConversations}
-        handleGoToHome={handleGoToHome}
-      />
+      {isMobile && currentConversation?.id ? null : (
+        <ChatListDrawer
+          conversations={conversations}
+          currentConversation={currentConversation}
+          loggedInUser={loggedInUser}
+          drawerWidth={drawerWidth}
+          newMessagesInConversations={newMessagesInConversations}
+          handleGoToHome={handleGoToHome}
+        />
+      )}
       {currentConversation && currentConversation?.id ? (
         <ConversationContainer
           allMessages={allMessages}
@@ -57,7 +60,7 @@ export default function ResponsiveChatDrawer() {
           messagesEndRef={messagesEndRef}
         />
       ) : (
-        <NoChatOpen drawerWidth={drawerWidth} />
+        !isMobile && <NoChatOpen drawerWidth={drawerWidth} />
       )}
     </Grid>
   );

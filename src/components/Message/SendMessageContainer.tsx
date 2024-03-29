@@ -4,6 +4,7 @@ import {
   IconButton,
   Popover,
   TextField,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React from "react";
@@ -18,6 +19,7 @@ import ViewAttachedFileModal from "./ViewAttachedFileModal";
 
 const SendMessageContainer = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery("(max-width: 320px)");
   const {
     handleSendMessage,
     messageBody,
@@ -34,7 +36,14 @@ const SendMessageContainer = () => {
   return (
     <>
       <Divider />
-      <Grid item px={5} py={1} display="flex" alignItems="center" gap={2}>
+      <Grid
+        item
+        px={isMobile ? 1 : 5}
+        py={1}
+        display="flex"
+        alignItems="center"
+        gap={2}
+      >
         <TextField
           value={messageBody?.body}
           placeholder="Send message"

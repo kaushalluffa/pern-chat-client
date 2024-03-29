@@ -6,6 +6,7 @@ import {
   MenuItem,
   Popover,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -24,10 +25,12 @@ const MessageCard = ({
   messagesEndRef,
 }: MessageCardProps) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery("(max-width: 320px)");
   const { handleDeleteMessage } = useMessages();
   const [messageCardAnchorEl, setMessageCardAnchorEl] =
     useState<HTMLElement | null>(null);
   const isFileUrl = checkIfMessageIsFileUrl(message?.fileUrl as string);
+  console.log(isMobile, "isMobile");
   return (
     <>
       <Grid
@@ -38,7 +41,7 @@ const MessageCard = ({
         display="flex"
         alignItems="center"
         gap={2}
-        maxWidth="35%"
+        maxWidth={isMobile ? "90%" : "35%"}
         alignSelf={
           message?.sender?.userId === loggedInUser?.user?.id
             ? "flex-end"
@@ -50,14 +53,16 @@ const MessageCard = ({
             : "row"
         }
       >
-        <Avatar
-          {...(message?.sender?.user?.imageUrl
-            ? {}
-            : message?.sender?.user?.name
-            ? { ...stringAvatar(message?.sender?.user?.name) }
-            : {})}
-          sx={{ color: theme.palette.text.primary }}
-        />
+        {!isMobile && (
+          <Avatar
+            {...(message?.sender?.user?.imageUrl
+              ? {}
+              : message?.sender?.user?.name
+              ? { ...stringAvatar(message?.sender?.user?.name) }
+              : {})}
+            sx={{ color: theme.palette.text.primary }}
+          />
+        )}
 
         <Grid
           item

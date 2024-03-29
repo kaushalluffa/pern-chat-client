@@ -24,13 +24,12 @@ const ChatListDrawer = ({
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: drawerWidth,
           },
         }}
-        open
+        // open={isMobile && currentConversation?.id ? false : true}
       >
         <ChatListHeader handleGoToHome={handleGoToHome} />
         <Divider />
