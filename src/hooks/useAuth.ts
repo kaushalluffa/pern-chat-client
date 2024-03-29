@@ -4,6 +4,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { SignupData } from "@/utils/types";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function useAuth() {
@@ -54,26 +55,46 @@ export default function useAuth() {
 
   async function handleSignup() {
     setLoading("signup");
-
-    const response = await userSignup(signupData);
-    if (response && response?.data) {
-      setLoggedInUser({ isAuthenticated: true, user: response?.data });
-      navigate("/");
+    try {
+      const response = await userSignup(signupData);
+      if (response && response?.data) {
+        setLoggedInUser({ isAuthenticated: true, user: response?.data });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.toString() ?? "Failed to sign up please try again", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
     setLoading(null);
   }
   async function handleLogin() {
     setLoading("login");
-    const response = await userLogin(loginData);
-    if (response && response?.data) {
-      setLoggedInUser({ isAuthenticated: true, user: response?.data });
-      navigate("/");
+    try {
+      const response = await userLogin(loginData);
+      if (response && response?.data) {
+        setLoggedInUser({ isAuthenticated: true, user: response?.data });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.toString() ?? "Failed to login please try again", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
     setLoading(null);
   }
   async function logout() {
     await removeCookie("token");
-    navigate("/login");
   }
 
   return {

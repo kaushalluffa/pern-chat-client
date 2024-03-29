@@ -1,5 +1,6 @@
 import { VITE_SERVER_URL } from "@/utils/constants";
 import axios, { AxiosRequestConfig } from "axios";
+import toast from "react-hot-toast";
 
 export default async function authFetchHandler<T>({
   endPoint,
@@ -21,5 +22,15 @@ export default async function authFetchHandler<T>({
     return response;
   } catch (error) {
     console.log(error);
+    toast.error(
+      error?.toString() ?? "Something went wrong please try again later",
+      {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      }
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Grid, Toolbar } from "@mui/material";
+import { Grid, Toolbar, useMediaQuery } from "@mui/material";
 import React from "react";
 import CustomAppBar from "../Custom/CustomAppBar";
 import { ConversationContainerProps } from "@/utils/types";
@@ -12,13 +12,16 @@ const ConversationContainer = ({
   loggedInUser,
   messagesEndRef,
 }: ConversationContainerProps) => {
+  const isTablet = useMediaQuery("(max-width: 768px)");
+
   return (
     <Grid
       sx={{
-        ml: { sm: `${drawerWidth}px` },
+        ml: isTablet ? 0 : `${drawerWidth}px`,
       }}
       container
       flexDirection="column"
+      width="100%"
     >
       <CustomAppBar
         currentLoggedInMember={currentLoggedInMember}

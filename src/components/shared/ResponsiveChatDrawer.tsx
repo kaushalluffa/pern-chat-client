@@ -8,7 +8,7 @@ import ConversationContainer from "../Conversation/ConversationContainer";
 import NoChatOpen from "./NoChatOpen";
 const drawerWidth = 320;
 export default function ResponsiveChatDrawer() {
-  const isMobile = useMediaQuery("(max-width: 320px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const { state } = useLocation();
   const { loggedInUser } = useAuthContext();
   const {
@@ -41,7 +41,7 @@ export default function ResponsiveChatDrawer() {
 
   return (
     <Grid container>
-      {isMobile && currentConversation?.id ? null : (
+      {isTablet && currentConversation?.id ? null : (
         <ChatListDrawer
           conversations={conversations}
           currentConversation={currentConversation}
@@ -60,7 +60,7 @@ export default function ResponsiveChatDrawer() {
           messagesEndRef={messagesEndRef}
         />
       ) : (
-        !isMobile && <NoChatOpen drawerWidth={drawerWidth} />
+        !isTablet && <NoChatOpen drawerWidth={drawerWidth} />
       )}
     </Grid>
   );

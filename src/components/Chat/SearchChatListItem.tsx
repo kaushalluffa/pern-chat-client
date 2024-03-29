@@ -1,7 +1,8 @@
 import { useConversationContext } from "@/contexts/ConversationContext";
 import { Search } from "@mui/icons-material";
-import { IconButton, ListItem, TextField, useTheme } from "@mui/material";
+import { IconButton, ListItem, useTheme } from "@mui/material";
 import React from "react";
+import CustomTextField from "../Custom/CustomTextField";
 
 const SearchChatListItem = () => {
   const theme = useTheme();
@@ -9,7 +10,7 @@ const SearchChatListItem = () => {
     useConversationContext()!;
   return (
     <ListItem>
-      <TextField
+      <CustomTextField
         placeholder="Search chats"
         size="small"
         fullWidth
@@ -19,24 +20,6 @@ const SearchChatListItem = () => {
           event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
         ) => {
           setSearchConversationValue(event.target.value);
-        }}
-        sx={{
-          "& .MuiInput-underline:after": {
-            borderBottomColor: theme.palette.divider,
-          },
-          "& .MuiOutlinedInput-root": {
-            borderRadius: 4,
-            color: theme.palette.text.secondary,
-            "& fieldset": {
-              borderColor: theme.palette.divider,
-            },
-            "&:hover fieldset": {
-              borderColor: theme.palette.divider,
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: theme.palette.divider,
-            },
-          },
         }}
         InputProps={{
           endAdornment: (

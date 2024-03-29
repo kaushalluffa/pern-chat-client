@@ -3,7 +3,6 @@ import {
   Grid,
   IconButton,
   Popover,
-  TextField,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -16,10 +15,11 @@ import EmojiPicker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import useMessages from "@/hooks/useMessages";
 import ViewAttachedFileModal from "./ViewAttachedFileModal";
+import CustomTextField from "../Custom/CustomTextField";
 
 const SendMessageContainer = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery("(max-width: 320px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const {
     handleSendMessage,
     messageBody,
@@ -38,37 +38,19 @@ const SendMessageContainer = () => {
       <Divider />
       <Grid
         item
-        px={isMobile ? 1 : 5}
+        px={isTablet ? 1 : 5}
         py={1}
         display="flex"
         alignItems="center"
         gap={2}
       >
-        <TextField
+        <CustomTextField
           value={messageBody?.body}
           placeholder="Send message"
           size="small"
           fullWidth
           multiline
           maxRows={2}
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
-          }}
           onChange={(
             event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
           ) => {

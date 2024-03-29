@@ -4,6 +4,7 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -14,6 +15,7 @@ import SettingsMenu from "./SettingsMenu";
 
 const ChatListHeader = ({ handleGoToHome }: { handleGoToHome: () => void }) => {
   const theme = useTheme();
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const { loggedInUser } = useAuthContext();
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(
     null
@@ -32,18 +34,20 @@ const ChatListHeader = ({ handleGoToHome }: { handleGoToHome: () => void }) => {
           </Typography>
         </Tooltip>
         <Grid item display="flex" alignItems="center" gap={1}>
-          <IconButton
-            disableRipple
-            sx={{
-              bgcolor: theme.palette.primary.main,
-              color: theme.palette.common.white,
-            }}
-            onClick={() => {
-              handleGoToHome();
-            }}
-          >
-            <Home />
-          </IconButton>
+          {!isTablet && (
+            <IconButton
+              disableRipple
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                color: theme.palette.common.white,
+              }}
+              onClick={() => {
+                handleGoToHome();
+              }}
+            >
+              <Home />
+            </IconButton>
+          )}
 
           <IconButton
             disableRipple

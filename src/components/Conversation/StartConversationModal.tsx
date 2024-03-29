@@ -5,13 +5,14 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  TextField,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React from "react";
 import AddUserListItem from "../shared/AddUserListItem";
 import NoDataAvailable from "../shared/NoDataAvailable";
 import CustomButton from "../Custom/CustomButton";
+import CustomTextField from "../Custom/CustomTextField";
 
 const StartConversationModal = ({
   open,
@@ -28,7 +29,7 @@ const StartConversationModal = ({
   setGroupTitle,
 }: StartConversationModalProps) => {
   const theme = useTheme();
-
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const renderUsers = (usersList: User[]) => {
     return usersList?.map((user: User) => (
       <AddUserListItem
@@ -50,7 +51,12 @@ const StartConversationModal = ({
     onClose();
   }
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="lg">
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="lg"
+      fullScreen={isTablet}
+    >
       <DialogTitle color={theme.palette.text.secondary}>
         Select users to start a conversation
       </DialogTitle>
@@ -59,60 +65,22 @@ const StartConversationModal = ({
           container
           flexDirection="column"
           gap={2}
-          sx={{ width: { xs: "320px", sm: "600px" } }}
+          sx={{ width: isTablet ? "100%" : "600px" }}
         >
-          <TextField
+          <CustomTextField
             value={searchUserValue}
             size="small"
             placeholder="Search users to start conversation"
-            sx={{
-              "& .MuiInput-underline:after": {
-                borderBottomColor: "transparent",
-              },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-                color: theme.palette.text.secondary,
-                bgcolor: theme.palette.action.hover,
-                "& fieldset": {
-                  borderColor: "transparent",
-                },
-                "&:hover fieldset": {
-                  borderColor: "transparent",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "transparent",
-                },
-              },
-            }}
             onChange={handleSearchUserChange}
             variant="outlined"
           />
           {type === "GROUP" && (
-            <TextField
+            <CustomTextField
               label="Group Title"
               required={type === "GROUP"}
               value={groupTitle}
               size="small"
               placeholder="Please enter a group title"
-              sx={{
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "transparent",
-                },
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: 4,
-                  color: theme.palette.text.secondary,
-                  bgcolor: theme.palette.action.hover,
-                  "& fieldset": {
-                    borderColor: "transparent",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "transparent",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "transparent",
-                  },
-                },
-              }}
               onChange={(
                 event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
               ) => {

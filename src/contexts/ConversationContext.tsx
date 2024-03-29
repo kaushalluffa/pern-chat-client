@@ -27,6 +27,7 @@ import {
   getConversation,
 } from "@/api/conversationsApiHandlers";
 import { getAllUsers } from "@/api/usersApiHandlers";
+import toast from "react-hot-toast";
 
 const ConversationContext = createContext<ConversationContextType | null>(null);
 
@@ -90,19 +91,34 @@ export default function ConversationContextProvider({
     }
   }
   async function handleCreateConversation() {
-    await createConversation({
-      members: [
-        ...selectedUserForConversation,
+    try {
+      await createConversation({
+        members: [
+          ...selectedUserForConversation,
+          {
+            email: loggedInUser?.user?.email as string,
+            id: loggedInUser?.user?.id as string,
+            imageUrl: loggedInUser?.user?.imageUrl as string,
+            name: loggedInUser?.user?.name as string,
+          },
+        ],
+        type: openCreateConversationModal?.type,
+        ...(groupTitle ? { groupTitle, isGroup: !!groupTitle } : {}),
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.toString() ??
+          "Failed to create the conversation please try again later",
         {
-          email: loggedInUser?.user?.email as string,
-          id: loggedInUser?.user?.id as string,
-          imageUrl: loggedInUser?.user?.imageUrl as string,
-          name: loggedInUser?.user?.name as string,
-        },
-      ],
-      type: openCreateConversationModal?.type,
-      ...(groupTitle ? { groupTitle, isGroup: !!groupTitle } : {}),
-    });
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        }
+      );
+    }
     setOpenCreateConversationModal({
       isOpen: false,
       type: "DIRECT_MESSAGE",
@@ -126,8 +142,23 @@ export default function ConversationContextProvider({
   }
   const handleGetConversation = useCallback(
     async (searchConversationValue?: string) => {
-      const response = await getConversation(searchConversationValue);
-      setConversations(response);
+      try {
+        const response = await getConversation(searchConversationValue);
+        setConversations(response);
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          error?.toString() ??
+            "Failed to fetch conversations please try again ",
+          {
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          }
+        );
+      }
     },
     []
   );
@@ -141,12 +172,26 @@ export default function ConversationContextProvider({
   }, [searchConversationValue, handleGetConversation]);
   const debouncedSearchUser = useDebounce(handleGetUsers, 500);
   async function handleDeleteConversation() {
-    const response = await deleteConversation(
-      currentConversation?.id as string
-    );
-    if (response) {
-      setChatMenuAnchorEl(null);
-      handleGoToHome();
+    try {
+      const response = await deleteConversation(
+        currentConversation?.id as string
+      );
+      if (response) {
+        setChatMenuAnchorEl(null);
+        handleGoToHome();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.toString() ?? "Failed to delete conversation please try again",
+        {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        }
+      );
     }
   }
   useEffect(() => {

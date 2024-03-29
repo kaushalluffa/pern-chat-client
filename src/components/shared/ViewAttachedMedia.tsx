@@ -4,7 +4,7 @@ import { IKImage, IKVideo } from "imagekitio-react";
 import React from "react";
 
 const ViewAttachedMedia = ({ src }: { src: string }) => {
-  const isMobile = useMediaQuery("(max-width: 320px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const isVideo = checkIfUrlIsVideo(src);
   const isImage = checkIfUrlIsImage(src);
   if (isVideo && src?.split("/")?.pop()) {
@@ -12,12 +12,12 @@ const ViewAttachedMedia = ({ src }: { src: string }) => {
       <IKVideo
         path={src?.split("/")?.pop() as string}
         controls={true}
-        width={isMobile ? "200" : "400"}
+        width={isTablet ? "200" : "400"}
       />
     );
   }
   if (isImage) {
-    return <IKImage src={src} width={isMobile ? "200" : "400"} />;
+    return <IKImage src={src} width={isTablet ? "200" : "400"} />;
   }
   return (
     <Typography variant="h6" fontWeight="bold">

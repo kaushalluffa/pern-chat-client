@@ -15,6 +15,7 @@ import {
 } from "./utils/constants";
 import { authenticator } from "./utils/imageKitAuthenticatorHelper";
 import ImageKitContextProvider from "./contexts/ImageKitContext";
+import { Toaster } from "react-hot-toast";
 const container = document.getElementById("root");
 
 if (!container) throw new Error("Could not find root element with id 'root'");
@@ -35,6 +36,7 @@ root.render(
                 <ConversationContextProvider>
                   <CssBaseline />
                   <AllRoutes />
+                  <Toaster position="top-right" reverseOrder={false} />
                 </ConversationContextProvider>
               </SocketContextProvider>
             </AuthContextProvider>

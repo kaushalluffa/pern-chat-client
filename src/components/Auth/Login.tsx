@@ -1,16 +1,10 @@
-import {
-  Grid,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Grid, IconButton, Paper, Typography, useTheme } from "@mui/material";
 import React from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import useAuth from "@/hooks/useAuth";
 import CustomButton from "../Custom/CustomButton";
+import CustomTextField from "../Custom/CustomTextField";
 
 const Login = () => {
   const theme = useTheme();
@@ -30,7 +24,9 @@ const Login = () => {
         <Typography variant="h5" color={theme.palette.text.secondary}>
           Sign In
         </Typography>
-        <TextField
+        <CustomTextField
+          label="Email"
+          required
           value={loginData?.email}
           onChange={(
             event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,26 +35,10 @@ const Login = () => {
           }}
           size="small"
           placeholder="Enter your email"
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
-          }}
         />
-        <TextField
+        <CustomTextField
+          label="Password"
+          required
           value={loginData?.password}
           onChange={(
             event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -85,24 +65,6 @@ const Login = () => {
           }}
           size="small"
           placeholder="Enter your password"
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
-          }}
         />
         <CustomButton
           loading={loading === "login"}
