@@ -7,12 +7,13 @@ import {
   Popover,
   Toolbar,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { CustomAppBarProps, Member } from "@/utils/types";
-import { Close, Delete } from "@mui/icons-material";
+import { ArrowBack, Close, Delete } from "@mui/icons-material";
 import { useConversationContext } from "@/contexts/ConversationContext";
 import { useNavigate } from "react-router-dom";
 import stringAvatar from "@/utils/stringAvatar";
@@ -22,6 +23,7 @@ const CustomAppBar = ({
   currentLoggedInMember,
 }: CustomAppBarProps) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery("(max-width: 320px)");
   const navigate = useNavigate();
   const {
     currentConversation,
@@ -30,6 +32,7 @@ const CustomAppBar = ({
     chatMenuAnchorEl,
     setChatMenuAnchorEl,
     handleDeleteConversation,
+    handleGoToHome,
   } = useConversationContext()!;
 
   const showOnlineGroup =
@@ -69,6 +72,11 @@ const CustomAppBar = ({
         <Toolbar>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item display="flex" gap={1} alignItems="center">
+              {isMobile && (
+                <IconButton onClick={handleGoToHome}>
+                  <ArrowBack />
+                </IconButton>
+              )}
               <Avatar
                 {...(conversationTitle && !conversationImageUrl?.trim()?.length
                   ? stringAvatar(conversationTitle)
@@ -119,6 +127,7 @@ const CustomAppBar = ({
           <MenuItem
             onClick={() => {
               setCurrentConversation && setCurrentConversation(null);
+              setChatMenuAnchorEl(null);
               navigate("/");
             }}
           >
@@ -133,6 +142,7 @@ const CustomAppBar = ({
           </MenuItem>
           <MenuItem
             onClick={() => {
+              setChatMenuAnchorEl(null);
               handleDeleteConversation();
             }}
           >
