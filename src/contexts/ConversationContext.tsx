@@ -164,12 +164,19 @@ export default function ConversationContextProvider({
   );
   const debouncedSearchChat = useDebounce(handleGetConversation, 500);
   useEffect(() => {
-    if (searchConversationValue) {
-      debouncedSearchChat(searchConversationValue);
-    } else {
-      handleGetConversation();
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchConversationValue, handleGetConversation]);
+    if (
+      loggedInUser &&
+      loggedInUser?.isAuthenticated &&
+      loggedInUser?.user?.id
+    ) {
+      if (searchConversationValue) {
+        debouncedSearchChat(searchConversationValue);
+      } else {
+        handleGetConversation();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchConversationValue, handleGetConversation, loggedInUser]);
   const debouncedSearchUser = useDebounce(handleGetUsers, 500);
   async function handleDeleteConversation() {
     try {
