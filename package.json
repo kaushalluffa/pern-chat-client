@@ -1,9 +1,9 @@
 {
-  "name": "discord-client-react",
+  "name": "pern-chat-client",
   "version": "0.0.0",
   "type": "module",
   "repository": {
-    "url": "git@github.com:kaushalluffa/discord-client-react.git"
+    "url": "git@github.com:kaushalluffa/pern-chat-client.git"
   },
   "scripts": {
     "dev": "vite",
