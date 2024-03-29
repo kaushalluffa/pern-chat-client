@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Avatar,
+  Badge,
   Grid,
   IconButton,
   Paper,
-  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -14,6 +14,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import CustomButton from "../Custom/CustomButton";
 import useAuth from "@/hooks/useAuth";
 import { useImageKitContext } from "@/contexts/ImageKitContext";
+import CustomTextField from "../Custom/CustomTextField";
 
 const Signup = () => {
   const theme = useTheme();
@@ -44,7 +45,16 @@ const Signup = () => {
           Sign Up
         </Typography>
         <Grid item display="flex" alignItems="center" gap={1}>
-          <Avatar src={signupData?.imageUrl} />
+          <Badge
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            badgeContent={
+              <Typography fontWeight="bold" color={theme.palette.error.main}>
+                *
+              </Typography>
+            }
+          >
+            <Avatar src={signupData?.imageUrl} />
+          </Badge>
 
           <CustomButton
             loading={uploadImgLoading}
@@ -59,7 +69,9 @@ const Signup = () => {
             Add profile picture
           </CustomButton>
         </Grid>
-        <TextField
+        <CustomTextField
+          label="Email"
+          required
           value={signupData?.email}
           size="small"
           placeholder="Enter your email"
@@ -70,26 +82,10 @@ const Signup = () => {
           ) => {
             handleSignupDataChange({ key: "email", value: event.target.value });
           }}
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
-          }}
         />
-        <TextField
+        <CustomTextField
+          label="Full Name"
+          required
           value={signupData?.fullName}
           size="small"
           placeholder="Full Name"
@@ -103,26 +99,10 @@ const Signup = () => {
               value: event.target.value,
             });
           }}
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
-          }}
         />
-        <TextField
+        <CustomTextField
+          label="Password"
+          required
           value={signupData?.password}
           size="small"
           placeholder="Enter your password"
@@ -150,26 +130,10 @@ const Signup = () => {
               </IconButton>
             ),
           }}
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
-          }}
         />
-        <TextField
+        <CustomTextField
+          label="Confirm Password"
+          required
           value={signupData?.cPassword}
           size="small"
           placeholder="Confirm your password"
@@ -200,24 +164,6 @@ const Signup = () => {
                 )}
               </IconButton>
             ),
-          }}
-          sx={{
-            "& .MuiInput-underline:after": {
-              borderBottomColor: theme.palette.divider,
-            },
-            "& .MuiOutlinedInput-root": {
-              color: theme.palette.text.secondary,
-              borderRadius: 4,
-              "& fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.divider,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.divider,
-              },
-            },
           }}
         />
         <CustomButton
