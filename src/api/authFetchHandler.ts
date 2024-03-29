@@ -16,9 +16,6 @@ export default async function authFetchHandler<T>({
     withCredentials: true,
     method: method || "GET",
     data,
-    headers: {
-      "Content-Type": "application/json",
-    },
   };
   try {
     const response = await axios(url, options);
