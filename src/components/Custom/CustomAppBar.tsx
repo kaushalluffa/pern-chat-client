@@ -23,7 +23,7 @@ const CustomAppBar = ({
   currentLoggedInMember,
 }: CustomAppBarProps) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery("(max-width: 320px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
   const {
     currentConversation,
@@ -64,7 +64,7 @@ const CustomAppBar = ({
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: isTablet ? "100%" : `calc(100% - ${drawerWidth}px)`,
           ml: { sm: `${drawerWidth}px` },
         }}
         color="transparent"
@@ -72,7 +72,7 @@ const CustomAppBar = ({
         <Toolbar>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item display="flex" gap={1} alignItems="center">
-              {isMobile && (
+              {isTablet && (
                 <IconButton onClick={handleGoToHome}>
                   <ArrowBack />
                 </IconButton>

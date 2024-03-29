@@ -1,4 +1,4 @@
-import { Divider, Drawer, Grid, List } from "@mui/material";
+import { Divider, Drawer, Grid, List, useMediaQuery } from "@mui/material";
 import React from "react";
 import { ChatListDrawerProps } from "@/utils/types";
 import ChatListHeading from "./ChatListHeading";
@@ -14,6 +14,8 @@ const ChatListDrawer = ({
   newMessagesInConversations,
   handleGoToHome,
 }: ChatListDrawerProps) => {
+  const isTablet = useMediaQuery("(max-width: 768px)");
+
   return (
     <Grid
       sx={{
@@ -26,10 +28,10 @@ const ChatListDrawer = ({
         sx={{
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
-            width: drawerWidth,
+            width: isTablet ? "100%" : drawerWidth,
           },
         }}
-        // open={isMobile && currentConversation?.id ? false : true}
+        open
       >
         <ChatListHeader handleGoToHome={handleGoToHome} />
         <Divider />

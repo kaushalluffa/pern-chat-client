@@ -25,12 +25,11 @@ const MessageCard = ({
   messagesEndRef,
 }: MessageCardProps) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery("(max-width: 320px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const { handleDeleteMessage } = useMessages();
   const [messageCardAnchorEl, setMessageCardAnchorEl] =
     useState<HTMLElement | null>(null);
   const isFileUrl = checkIfMessageIsFileUrl(message?.fileUrl as string);
-  console.log(isMobile, "isMobile");
   return (
     <>
       <Grid
@@ -41,7 +40,7 @@ const MessageCard = ({
         display="flex"
         alignItems="center"
         gap={2}
-        maxWidth={isMobile ? "90%" : "35%"}
+        maxWidth={isTablet ? "90%" : "35%"}
         alignSelf={
           message?.sender?.userId === loggedInUser?.user?.id
             ? "flex-end"
@@ -53,7 +52,7 @@ const MessageCard = ({
             : "row"
         }
       >
-        {!isMobile && (
+        {!isTablet && (
           <Avatar
             {...(message?.sender?.user?.imageUrl
               ? {}

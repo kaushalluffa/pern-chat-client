@@ -19,7 +19,7 @@ import ViewAttachedFileModal from "./ViewAttachedFileModal";
 
 const SendMessageContainer = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery("(max-width: 320px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const {
     handleSendMessage,
     messageBody,
@@ -38,7 +38,7 @@ const SendMessageContainer = () => {
       <Divider />
       <Grid
         item
-        px={isMobile ? 1 : 5}
+        px={isTablet ? 1 : 5}
         py={1}
         display="flex"
         alignItems="center"
