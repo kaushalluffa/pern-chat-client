@@ -237,10 +237,10 @@ export default function ConversationContextProvider({
   useEffect(() => {
     if (socket) {
       socket.on("onlineUsersNumberForGroupChats", (data) => {
-        return setNumberOfOnlineUsersInCurrentConversation(data);
+        setNumberOfOnlineUsersInCurrentConversation(data);
       });
       socket.on("newMessage", (data) => {
-        return setAllMessages((prev) => {
+        setAllMessages((prev) => {
           if (prev?.find((message: Message) => message?.id === data?.id)) {
             return prev;
           } else {
@@ -249,7 +249,7 @@ export default function ConversationContextProvider({
         });
       });
       socket.on("deletedMessage", (deletedMessageId) => {
-        return setAllMessages((prev) => {
+        setAllMessages((prev) => {
           const filteredMessages = prev?.filter(
             (message) => message?.id !== deletedMessageId
           );
@@ -257,12 +257,12 @@ export default function ConversationContextProvider({
         });
       });
       socket.on("newConversation", (data) => {
-        return setConversations((prev) => {
+        setConversations((prev) => {
           return [data, ...prev];
         });
       });
       socket.on("deleteConversation", (deletedConversationId) => {
-        return setConversations((prev) => {
+        setConversations((prev) => {
           const filteredConversations = prev?.filter(
             (conversation) => conversation?.id !== deletedConversationId
           );
@@ -270,7 +270,7 @@ export default function ConversationContextProvider({
         });
       });
       socket.on("newMessageInConversation", (data) => {
-        return setNewMessageInConversations((prev) => {
+        setNewMessageInConversations((prev) => {
           const filterPrevMsgs = prev?.filter(
             (message) => message?.conversationId !== data?.conversationId
           );
@@ -279,11 +279,13 @@ export default function ConversationContextProvider({
       });
       return () => {
         socket.off("newMessage", () => {
-          return setAllMessages([]);
+          setAllMessages([]);
         });
         socket.off("deletedMessage", () => {});
         socket.off("onlineUsersNumberForGroupChats", () => {});
-        socket.off("newConversation", () => {});
+        socket.off("newConversation", () => {
+          setConversations([]);
+        });
         socket.off("newMessageInConversation", () => {
           setNewMessageInConversations([]);
         });
