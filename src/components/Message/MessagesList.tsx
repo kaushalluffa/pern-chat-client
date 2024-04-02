@@ -1,13 +1,11 @@
-import { Message, MessagesListProps } from "@/utils/types";
+import { Message } from "@/utils/types";
 import { Grid } from "@mui/material";
 import React from "react";
 import MessageCard from "./MessageCard";
+import { useConversationContext } from "@/hooks/useAllContextHooks";
 
-const MessagesList = ({
-  allMessages,
-  messagesEndRef,
-  loggedInUser,
-}: MessagesListProps) => {
+const MessagesList = () => {
+  const { allMessages, messagesEndRef } = useConversationContext()!;
   return (
     <Grid
       container
@@ -23,7 +21,6 @@ const MessagesList = ({
       {allMessages?.map((message: Message, i: number) => (
         <MessageCard
           key={message?.id}
-          loggedInUser={loggedInUser}
           message={message}
           passRef={i === allMessages?.length - 1}
           messagesEndRef={messagesEndRef}

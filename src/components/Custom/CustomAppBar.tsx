@@ -14,14 +14,14 @@ import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { CustomAppBarProps, Member } from "@/utils/types";
 import { ArrowBack, Close, Delete } from "@mui/icons-material";
-import { useConversationContext } from "@/contexts/ConversationContext";
 import { useNavigate } from "react-router-dom";
 import stringAvatar from "@/utils/stringAvatar";
+import {
+  useAuthContext,
+  useConversationContext,
+} from "@/hooks/useAllContextHooks";
 
-const CustomAppBar = ({
-  drawerWidth,
-  currentLoggedInMember,
-}: CustomAppBarProps) => {
+const CustomAppBar = ({ drawerWidth }: CustomAppBarProps) => {
   const theme = useTheme();
   const isTablet = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
@@ -34,7 +34,18 @@ const CustomAppBar = ({
     handleDeleteConversation,
     handleGoToHome,
   } = useConversationContext()!;
-
+  const { loggedInUser } = useAuthContext();
+  const notCurrentMember = currentConversation?.members?.find(
+    (member: Member) => member?.userId !== loggedInUser?.user?.id
+  );
+  const conversationTitle =
+    currentConversation?.type === "DIRECT_MESSAGE"
+      ? notCurrentMember?.user?.name
+      : currentConversation?.groupTitle;
+  const conversationImageUrl =
+    currentConversation?.type === "DIRECT_MESSAGE"
+      ? notCurrentMember?.user?.imageUrl
+      : "";
   const showOnlineGroup =
     currentConversation?.isGroup &&
     !!numberOfOnlineUsersInCurrentConversation &&
@@ -47,18 +58,6 @@ const CustomAppBar = ({
     numberOfOnlineUsersInCurrentConversation - 1 === 1
       ? "Online"
       : null;
-  const conversationTitle =
-    currentConversation?.type === "DIRECT_MESSAGE"
-      ? currentConversation?.members?.find(
-          (member: Member) => member?.userId !== currentLoggedInMember?.user?.id
-        )?.user?.name
-      : currentConversation?.groupTitle;
-  const conversationImageUrl =
-    currentConversation?.type === "DIRECT_MESSAGE"
-      ? currentConversation?.members?.find(
-          (member: Member) => member?.userId !== currentLoggedInMember?.user?.id
-        )?.user?.imageUrl
-      : "";
   return (
     <>
       <AppBar
@@ -78,11 +77,11 @@ const CustomAppBar = ({
                 </IconButton>
               )}
               <Avatar
+                src={conversationImageUrl ?? ""}
                 {...(conversationTitle && !conversationImageUrl?.trim()?.length
                   ? stringAvatar(conversationTitle)
                   : {})}
                 sx={{ color: theme.palette.text.primary }}
-                src={conversationImageUrl ?? ""}
               />
               <Grid item>
                 <Typography color={theme.palette.text.secondary}>

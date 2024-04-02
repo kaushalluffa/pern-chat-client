@@ -33,7 +33,6 @@ export interface ConversationContextType {
   allMessages: Message[];
   messagesEndRef: React.RefObject<HTMLDivElement>;
   currentConversation: Conversation | null;
-  currentLoggedInMember: Member | null;
   setCurrentConversation: React.Dispatch<
     SetStateAction<Conversation | null>
   > | null;
@@ -44,15 +43,10 @@ export interface ConversationContextType {
   handleGoToHome: () => void;
   newMessagesInConversations: Message[];
   setNewMessageInConversations: React.Dispatch<SetStateAction<Message[]>>;
-  handleUpdateNewMessagesInConversation: (conversationId: string) => void;
   groupTitle: string;
   setGroupTitle: React.Dispatch<React.SetStateAction<string>>;
-  searchUserValue: string;
-  setSearchUserValue: React.Dispatch<React.SetStateAction<string>>;
   conversations: Conversation[];
-  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
   allUsers: User[];
-  setAllUsers: React.Dispatch<React.SetStateAction<User[]>>;
   addChatAnchorEl: HTMLElement | null;
   setAddChatAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   openCreateConversationModal: {
@@ -71,13 +65,14 @@ export interface ConversationContextType {
   handleSearchUserChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  handleGetConversation: () => Promise<void>;
   handleDeleteConversation: () => Promise<void>;
   chatMenuAnchorEl: HTMLElement | null;
   setChatMenuAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   searchConversationValue: string;
   setSearchConversationValue: React.Dispatch<React.SetStateAction<string>>;
-  debouncedSearchChat: () => Promise<void>;
+
+  handleResetNewMessagesInConversation: (cId: string) => void;
+  searchUserValue: string;
 }
 
 export interface Message {
@@ -123,25 +118,16 @@ export interface Member {
 export interface StartConversationModalProps {
   open: boolean;
   onClose: () => void;
+  type: "DIRECT_MESSAGE" | "GROUP";
 }
 export interface ChatListDrawerProps {
-  conversations: Conversation[];
-  newMessagesInConversations: Message[];
-  loggedInUser: LoggedInUser;
-  currentConversation: Conversation | null;
   drawerWidth: number;
-  handleGoToHome: () => void;
 }
 export interface CustomAppBarProps {
   drawerWidth: number;
-  currentLoggedInMember: Member | null;
 }
 export interface ConversationContainerProps {
   drawerWidth: number;
-  currentLoggedInMember: Member | null;
-  loggedInUser: LoggedInUser;
-  allMessages: Message[];
-  messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 export interface SendMessageContainerProps {
   currentConversation: Conversation | null;
@@ -154,15 +140,14 @@ export interface MessagesListProps {
 }
 export interface MessageCardProps {
   message: Message;
-  loggedInUser: LoggedInUser;
   passRef: boolean;
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 export interface ChatListItemProps {
   conversation: Conversation;
-  loggedInUser: LoggedInUser;
   currentConversation: Conversation | null;
   newMessagesInConversations: Message[];
+  handleResetNewMessagesInConversation: (cId: string) => void;
 }
 export interface SearchChatListItemProps {}
 
@@ -215,19 +200,18 @@ export interface MessageBody {
   body?: string | null;
 }
 export type ConversationType = "DIRECT_MESSAGE" | "GROUP";
-export interface StartConversationModalProps {
-  open: boolean;
-  type: ConversationType;
-  onClose: () => void;
-  handleSearchUserChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  handleCreateConversation: () => Promise<void>;
-  allUsers: User[];
-  searchUserValue: string;
-  loggedInUser: LoggedInUser;
-  selectedUserForConversation: User[];
-  setSelectedUserForConversation: React.Dispatch<React.SetStateAction<User[]>>;
-  groupTitle: string;
-  setGroupTitle: React.Dispatch<React.SetStateAction<string>>;
+
+export interface SettingsMenuProps {
+  settingsAnchorEl: HTMLElement | null;
+  setSettingsAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+}
+export interface ImageKitContextType {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ikUploadRef: any | null;
+  uploadImageLoading: boolean;
+  setUploadImageLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  fileUrl: string | null;
+  setFileUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  fileId: string | null;
+  setFileId: React.Dispatch<React.SetStateAction<string | null>>;
 }

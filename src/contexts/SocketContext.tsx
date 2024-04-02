@@ -1,19 +1,13 @@
 import { VITE_SERVER_URL } from "@/utils/constants";
 import { SocketContextType } from "@/utils/types";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Socket, io } from "socket.io-client";
-import { useAuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useAuthContext } from "@/hooks/useAllContextHooks";
 
-const SocketContext = createContext<SocketContextType | null>(null);
+export const SocketContext = createContext<SocketContextType | null>(null);
 const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -73,7 +67,5 @@ const SocketContextProvider = ({ children }: { children: React.ReactNode }) => {
     </SocketContext.Provider>
   );
 };
-export function useSocketContext() {
-  return useContext(SocketContext);
-}
+
 export default SocketContextProvider;

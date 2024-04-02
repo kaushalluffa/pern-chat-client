@@ -10,12 +10,16 @@ import {
 import React, { useState } from "react";
 import SettingIcon from "@mui/icons-material/Settings";
 import { Home } from "@mui/icons-material";
-import { useAuthContext } from "@/contexts/AuthContext";
 import SettingsMenu from "./SettingsMenu";
+import {
+  useAuthContext,
+  useConversationContext,
+} from "@/hooks/useAllContextHooks";
 
-const ChatListHeader = ({ handleGoToHome }: { handleGoToHome: () => void }) => {
+const ChatListHeader = () => {
   const theme = useTheme();
   const isTablet = useMediaQuery("(max-width: 768px)");
+  const { handleGoToHome } = useConversationContext()!;
   const { loggedInUser } = useAuthContext();
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(
     null

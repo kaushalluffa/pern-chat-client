@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { userLogin, userSignup } from "@/api/authApiHandlers";
-import { useAuthContext } from "@/contexts/AuthContext";
 import { SignupData } from "@/utils/types";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "./useAllContextHooks";
 
 export default function useAuth() {
   const navigate = useNavigate();
+  //eslint-disable-next-line
   const [cookies, _, removeCookie] = useCookies(["token"]);
   const [loading, setLoading] = useState<"login" | "signup" | null>(null);
   const { setLoggedInUser } = useAuthContext();

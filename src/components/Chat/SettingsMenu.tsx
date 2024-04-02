@@ -1,4 +1,3 @@
-import { useThemeContext } from "@/contexts/ThemeContextProvider";
 import {
   ListItem,
   ListItemButton,
@@ -11,6 +10,7 @@ import React from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { Contrast, Logout } from "@mui/icons-material";
 import useAuth from "@/hooks/useAuth";
+import { useThemeContext } from "@/hooks/useAllContextHooks";
 
 const SettingsMenu = ({
   settingsAnchorEl,

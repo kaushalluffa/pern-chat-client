@@ -1,7 +1,7 @@
 import { darkTheme, lightTheme } from "@/theme";
 import { ThemeProvider } from "@mui/material";
-import React, { createContext, useContext, useEffect, useState } from "react";
-const ThemeContext = createContext<{
+import React, { createContext, useEffect, useState } from "react";
+export const ThemeContext = createContext<{
   mode: "light" | "dark";
   handleSetTheme: (newMode: "light" | "dark") => void;
 }>({
@@ -10,10 +10,6 @@ const ThemeContext = createContext<{
     return newMode;
   },
 });
-
-export const useThemeContext = () => {
-  return useContext(ThemeContext);
-};
 
 const ThemeContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [mode, setMode] = useState<"light" | "dark">("light");

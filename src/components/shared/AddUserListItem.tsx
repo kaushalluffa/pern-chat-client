@@ -19,6 +19,20 @@ const AddUserListItem = ({
   type,
 }: AddUserListItemProps) => {
   const theme = useTheme();
+  const isCurrentUserSelected = selectedUsers?.find((u) => u?.id === user?.id);
+  function handleSelectUser() {
+    if (type === "DIRECT_MESSAGE") {
+      setSelectedUsers([user]);
+    }
+    if (type === "GROUP") {
+      setSelectedUsers((prevUsers) => {
+        if (isCurrentUserSelected) {
+          return prevUsers?.filter((u) => u?.id !== user?.id);
+        }
+        return [...prevUsers, user];
+      });
+    }
+  }
   return (
     <ListItem
       disablePadding
@@ -33,24 +47,7 @@ const AddUserListItem = ({
       <ListItemButton
         selected={!!selectedUsers?.find((s) => s?.id === user?.id)}
         sx={{ borderRadius: 4 }}
-        onClick={() => {
-          if (type === "DIRECT_MESSAGE") {
-            setSelectedUsers([user]);
-          }
-          if (type === "GROUP") {
-            setSelectedUsers((prev: User[]) => {
-              const isUserExist = prev?.find(
-                (prevUser: User) => prevUser?.id === user?.id
-              );
-              if (isUserExist) {
-                return prev?.filter(
-                  (prevUser: User) => user?.id !== prevUser?.id
-                );
-              }
-              return [...prev, user];
-            });
-          }
-        }}
+        onClick={handleSelectUser}
       >
         <ListItemIcon>
           <Avatar

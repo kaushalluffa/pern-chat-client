@@ -13,23 +13,25 @@ import AddUserListItem from "../shared/AddUserListItem";
 import NoDataAvailable from "../shared/NoDataAvailable";
 import CustomButton from "../Custom/CustomButton";
 import CustomTextField from "../Custom/CustomTextField";
+import { useConversationContext } from "@/hooks/useAllContextHooks";
 
 const StartConversationModal = ({
   open,
   type,
   onClose,
-  handleSearchUserChange,
-  handleCreateConversation,
-  allUsers,
-  searchUserValue,
-  loggedInUser,
-  selectedUserForConversation,
-  setSelectedUserForConversation,
-  groupTitle,
-  setGroupTitle,
 }: StartConversationModalProps) => {
   const theme = useTheme();
   const isTablet = useMediaQuery("(max-width: 768px)");
+  const {
+    allUsers,
+    searchUserValue,
+    handleSearchUserChange,
+    selectedUserForConversation,
+    setSelectedUserForConversation,
+    handleCreateConversation,
+    groupTitle,
+    setGroupTitle,
+  } = useConversationContext()!;
   const renderUsers = (usersList: User[]) => {
     return usersList?.map((user: User) => (
       <AddUserListItem
@@ -42,13 +44,9 @@ const StartConversationModal = ({
     ));
   };
   function handleClose() {
-    setSelectedUserForConversation(
-      loggedInUser?.isAuthenticated && loggedInUser?.user
-        ? [loggedInUser?.user]
-        : []
-    );
-    setGroupTitle("");
     onClose();
+    setSelectedUserForConversation([]);
+    setGroupTitle("");
   }
   return (
     <Dialog

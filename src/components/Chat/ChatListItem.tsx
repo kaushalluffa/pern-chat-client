@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/hooks/useAllContextHooks";
 import stringAvatar from "@/utils/stringAvatar";
 import { ChatListItemProps, Member } from "@/utils/types";
 import {
@@ -15,28 +16,27 @@ import { useNavigate } from "react-router-dom";
 
 const ChatListItem = ({
   conversation,
-  loggedInUser,
   currentConversation,
   newMessagesInConversations,
 }: ChatListItemProps) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { loggedInUser } = useAuthContext();
+  const notCurrentMember = conversation?.members?.find(
+    (member: Member) => member?.userId !== loggedInUser?.user?.id
+  );
   const conversationTitle =
     conversation?.type === "DIRECT_MESSAGE"
-      ? conversation?.members?.find(
-          (member: Member) => member?.userId !== loggedInUser?.user?.id
-        )?.user?.name
+      ? notCurrentMember?.user?.name
       : conversation?.groupTitle;
   const conversationImageUrl =
     conversation?.type === "DIRECT_MESSAGE"
-      ? conversation?.members?.find(
-          (member: Member) => member?.userId !== loggedInUser?.user?.id
-        )?.user?.imageUrl
+      ? notCurrentMember?.user?.imageUrl
       : "";
   const newMessage =
     currentConversation?.id !== conversation?.id
       ? newMessagesInConversations?.find(
-          (message) => message?.conversationId === conversation?.id
+          (msg) => msg?.conversationId === conversation?.id
         )
       : null;
 

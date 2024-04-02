@@ -5,13 +5,7 @@ import { ConversationContainerProps } from "@/utils/types";
 import MessagesList from "../Message/MessagesList";
 import SendMessageContainer from "../Message/SendMessageContainer";
 
-const ConversationContainer = ({
-  allMessages,
-  currentLoggedInMember,
-  drawerWidth,
-  loggedInUser,
-  messagesEndRef,
-}: ConversationContainerProps) => {
+const ConversationContainer = ({ drawerWidth }: ConversationContainerProps) => {
   const isTablet = useMediaQuery("(max-width: 768px)");
 
   return (
@@ -23,16 +17,9 @@ const ConversationContainer = ({
       flexDirection="column"
       width="100%"
     >
-      <CustomAppBar
-        currentLoggedInMember={currentLoggedInMember}
-        drawerWidth={drawerWidth}
-      />
+      <CustomAppBar drawerWidth={drawerWidth} />
       <Toolbar />
-      <MessagesList
-        allMessages={allMessages}
-        messagesEndRef={messagesEndRef}
-        loggedInUser={loggedInUser}
-      />
+      <MessagesList />
       <SendMessageContainer />
     </Grid>
   );

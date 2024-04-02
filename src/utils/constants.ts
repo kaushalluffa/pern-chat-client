@@ -1,6 +1,4 @@
 export const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
-export const VITE_SIGNUP_SUCCESS_REDIRECT = import.meta.env
-  .VITE_SIGNUP_SUCCESS_REDIRECT;
 export const VITE_IMAGE_KIT_URL_ENDPOINT = import.meta.env
   .VITE_IMAGE_KIT_URL_ENDPOINT;
 export const VITE_IMAGE_KIT_PUBLIC_KEY = import.meta.env

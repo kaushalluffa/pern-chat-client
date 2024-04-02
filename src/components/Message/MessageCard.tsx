@@ -17,19 +17,22 @@ import { Delete } from "@mui/icons-material";
 import { checkIfMessageIsFileUrl } from "@/utils/helpers";
 import ViewAttachedMedia from "../shared/ViewAttachedMedia";
 import useMessages from "@/hooks/useMessages";
+import dayjs from "dayjs";
+import { useAuthContext } from "@/hooks/useAllContextHooks";
 
 const MessageCard = ({
   message,
-  loggedInUser,
   passRef,
   messagesEndRef,
 }: MessageCardProps) => {
   const theme = useTheme();
   const isTablet = useMediaQuery("(max-width: 768px)");
+  const { loggedInUser } = useAuthContext();
   const { handleDeleteMessage } = useMessages();
   const [messageCardAnchorEl, setMessageCardAnchorEl] =
     useState<HTMLElement | null>(null);
   const isFileUrl = checkIfMessageIsFileUrl(message?.fileUrl as string);
+  const avatarImgUrl = message?.sender?.user?.imageUrl ?? "";
   return (
     <>
       <Grid
@@ -54,12 +57,12 @@ const MessageCard = ({
       >
         {!isTablet && (
           <Avatar
+            src={avatarImgUrl}
             {...(message?.sender?.user?.imageUrl
               ? {}
               : message?.sender?.user?.name
               ? { ...stringAvatar(message?.sender?.user?.name) }
               : {})}
-            sx={{ color: theme.palette.text.primary }}
           />
         )}
 
@@ -125,9 +128,11 @@ const MessageCard = ({
             gap={1}
           >
             <Typography variant="caption" color={theme.palette.text.primary}>
-              {new Date().toUTCString()}
+              {dayjs(message?.createdAt).format("MMM DD, YYYY h:mm A")}
             </Typography>
-            <DoneAllIcon sx={{ width: 16, height: 16 }} />
+            <DoneAllIcon
+              sx={{ width: 16, height: 16, color: theme.palette.text.primary }}
+            />
           </Grid>
         </Grid>
       </Grid>

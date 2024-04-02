@@ -1,23 +1,18 @@
 import React, {
   createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { useSocketContext } from "./SocketContext";
 import {
   Conversation,
   ConversationContextType,
   ConversationType,
-  Member,
   Message,
   User,
 } from "@/utils/types";
-
-import { useAuthContext } from "./AuthContext";
 import { getMessages } from "@/api/messagesApiHandlers";
 import { useNavigate } from "react-router-dom";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -28,8 +23,10 @@ import {
 } from "@/api/conversationsApiHandlers";
 import { getAllUsers } from "@/api/usersApiHandlers";
 import toast from "react-hot-toast";
+import { useAuthContext, useSocketContext } from "@/hooks/useAllContextHooks";
 
-const ConversationContext = createContext<ConversationContextType | null>(null);
+export const ConversationContext =
+  createContext<ConversationContextType | null>(null);
 
 export default function ConversationContextProvider({
   children,
@@ -50,8 +47,6 @@ export default function ConversationContextProvider({
   >([]);
   const [currentConversation, setCurrentConversation] =
     useState<Conversation | null>(null);
-  const [currentLoggedInMember, setCurrentLoggedInMember] =
-    useState<Member | null>(null);
   const [groupTitle, setGroupTitle] = useState<string>("");
   const [searchUserValue, setSearchUserValue] = useState<string>("");
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -75,19 +70,20 @@ export default function ConversationContextProvider({
   const [chatMenuAnchorEl, setChatMenuAnchorEl] = useState<HTMLElement | null>(
     null
   );
-  const handleUpdateNewMessagesInConversation = useCallback(
-    (conversationId: string) => {
-      setNewMessageInConversations((prev) =>
-        prev?.filter((message) => message?.conversationId !== conversationId)
+  function handleResetNewMessagesInConversation(cId: string) {
+    setNewMessageInConversations((prev) => {
+      const filteredMessages = prev?.filter(
+        (msg) => msg?.conversationId !== cId
       );
-    },
-    []
-  );
+      return [...filteredMessages];
+    });
+  }
   function handleGoToHome() {
     if (socket && currentConversation?.id) {
       socket.emit("leaveConversation", currentConversation?.id);
       navigate("/");
-      handleUpdateNewMessagesInConversation(currentConversation?.id);
+      setCurrentConversation(null);
+      handleResetNewMessagesInConversation(currentConversation?.id);
     }
   }
   async function handleCreateConversation() {
@@ -226,14 +222,7 @@ export default function ConversationContextProvider({
       getMessages(currentConversation?.id).then((res) => setAllMessages(res));
     }
   }, [currentConversation?.id]);
-  useEffect(() => {
-    if (currentConversation) {
-      const currentMember = currentConversation?.members?.find(
-        (member: Member) => member?.userId === loggedInUser?.user?.id
-      );
-      return setCurrentLoggedInMember(currentMember ?? null);
-    }
-  }, [currentConversation, loggedInUser]);
+
   useEffect(() => {
     if (socket) {
       socket.on("onlineUsersNumberForGroupChats", (data) => {
@@ -277,7 +266,9 @@ export default function ConversationContextProvider({
           return [...filterPrevMsgs, data];
         });
       });
-      return () => {
+    }
+    return () => {
+      if (socket) {
         socket.off("newMessage", () => {
           setAllMessages([]);
         });
@@ -289,8 +280,8 @@ export default function ConversationContextProvider({
         socket.off("newMessageInConversation", () => {
           setNewMessageInConversations([]);
         });
-      };
-    }
+      }
+    };
   }, [socket]);
   return (
     <ConversationContext.Provider
@@ -299,13 +290,11 @@ export default function ConversationContextProvider({
         allMessages,
         messagesEndRef,
         currentConversation,
-        currentLoggedInMember,
         numberOfOnlineUsersInCurrentConversation,
         setNumberOfOnlineUsersInCurrentConversation,
         handleGoToHome,
         newMessagesInConversations,
         setNewMessageInConversations,
-        handleUpdateNewMessagesInConversation,
         addChatAnchorEl,
         allUsers,
         conversations,
@@ -314,27 +303,20 @@ export default function ConversationContextProvider({
         searchUserValue,
         selectedUserForConversation,
         setAddChatAnchorEl,
-        setAllUsers,
-        setConversations,
         setGroupTitle,
         setOpenCreateConversationModal,
-        setSearchUserValue,
         setSelectedUserForConversation,
         handleCreateConversation,
         handleSearchUserChange,
-        handleGetConversation,
         chatMenuAnchorEl,
         setChatMenuAnchorEl,
         handleDeleteConversation,
         searchConversationValue,
         setSearchConversationValue,
-        debouncedSearchChat,
+        handleResetNewMessagesInConversation,
       }}
     >
       {children}
     </ConversationContext.Provider>
   );
 }
-export const useConversationContext = () => {
-  return useContext(ConversationContext);
-};

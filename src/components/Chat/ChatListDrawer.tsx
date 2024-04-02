@@ -6,14 +6,7 @@ import SearchChatListItem from "./SearchChatListItem";
 import ChatListHeader from "./ChatListHeader";
 import ChatListItems from "./ChatListItems";
 
-const ChatListDrawer = ({
-  conversations,
-  currentConversation,
-  loggedInUser,
-  drawerWidth,
-  newMessagesInConversations,
-  handleGoToHome,
-}: ChatListDrawerProps) => {
+const ChatListDrawer = ({ drawerWidth }: ChatListDrawerProps) => {
   const isTablet = useMediaQuery("(max-width: 768px)");
 
   return (
@@ -33,18 +26,13 @@ const ChatListDrawer = ({
         }}
         open
       >
-        <ChatListHeader handleGoToHome={handleGoToHome} />
+        <ChatListHeader />
         <Divider />
         <List>
           <SearchChatListItem />
           <Divider />
           <ChatListHeading />
-          <ChatListItems
-            conversations={conversations}
-            loggedInUser={loggedInUser}
-            currentConversation={currentConversation}
-            newMessagesInConversations={newMessagesInConversations}
-          />
+          <ChatListItems />
         </List>
       </Drawer>
     </Grid>
