@@ -26,7 +26,7 @@
     "imagekitio-react": "^4.0.0",
     "jwt-decode": "^4.0.0",
     "react": "^18",
-    "react-cookie": "^7.1.0",
+    "react-cookie": "^7.1.4",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.22.3",
