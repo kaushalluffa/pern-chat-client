@@ -1,6 +1,8 @@
-# React Chat Website Tutorial
+# When opening the link it may take time as i am using a free instance of render.com which spin down if there is no activity
 
-Welcome to the React Chat Website tutorial series! In this series, we'll be building a real-time chat application using modern web technologies. The backend server will be built with Node.js and Express, while the frontend will be developed using React, Vite, TypeScript, and Material-UI. We'll be using PostgreSQL as our database and Prisma as our ORM for seamless database interactions.
+# React Chat Website
+
+A real-time chat application built using modern web technologies. The backend server will be built with Node.js and Express, while the frontend will be developed using React, Vite, TypeScript, and Material-UI. I'll be using PostgreSQL as our database and Prisma as our ORM for seamless database interactions.
 
 ## Features
 
@@ -13,7 +15,7 @@ Welcome to the React Chat Website tutorial series! In this series, we'll be buil
 
 ## Getting Started
 
-To get started with this tutorial, make sure you have backend setup see step 4. You'll also need a basic understanding of JavaScript, React, and Node.js.
+To get started, make sure you have backend setup see step 4.
 
 ## 1. **Clone the repository:**
 
